@@ -43,26 +43,28 @@
                 <label for="tournamentDate">Tournament Date:</label>
                 <input type="date" id="tournamentDate" onchange="loadTournamentEntries()">
                 <button onclick="addPlayerEntry()">Add Player</button>
-                <table id="playerEntries">
-                    <thead>
-                        <tr>
-                            <th>Player</th>
-                            <th>Points</th>
-                            <th>P.Streak</th>
-                            <th>P.Point</th>
-                            <th>1st</th>
-                            <th>2nd</th>
-                            <th>3rd</th>
-                            <th>B.Challenge</th>
-                            <th>S.Challenge</th>
-                            <th>Shared</th>
-                            <th>No s.s.</th>
-                            <th>Penalty</th>
-                            <th>Remove</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="table-container">
+                    <table id="playerEntries">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Points</th>
+                                <th>P.Streak</th>
+                                <th>P.Point (4-16th)</th>
+                                <th>1st</th>
+                                <th>2nd</th>
+                                <th>3rd</th>
+                                <th>B.Challenge</th>
+                                <th>S.Challenge</th>
+                                <th>Shared</th>
+                                <th>No s.s.</th>
+                                <th>Penalty</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
                 <div class="button-group">
                     <button onclick="saveTournament()">Save Tournament</button>
                     <button onclick="editTournament()">Edit Tournament</button>
@@ -131,16 +133,18 @@
                 <label for="leaderboardSearch">Search Player:</label>
                 <input type="text" id="leaderboardSearch" oninput="filterLeaderboard()" placeholder="Enter player name">
             </div>
-            <table id="leaderboardTable">
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Player</th>
-                        <th>Total Points</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="table-container">
+                <table id="leaderboardTable">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Total Points</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
             <div class="pagination">
                 <button id="prevPage" onclick="changePage(-1)">Previous</button>
                 <span id="pageInfo"></span>
@@ -152,26 +156,28 @@
             </div>
             <div id="playerDetails" class="hidden">
                 <h3 id="playerDetailsName"></h3>
-                <table id="detailsTable">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>P.Streak</th>
-                            <th>P.Point</th>
-                            <th>1st</th>
-                            <th>2nd</th>
-                            <th>3rd</th>
-                            <th>B.Challenge</th>
-                            <th>S.Challenge</th>
-                            <th>Shared</th>
-                            <th>No s.s.</th>
-                            <th>Penalty</th>
-                            <th>Redeemed Items</th>
-                            <th>Points</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="table-container">
+                    <table id="detailsTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>P.Streak</th>
+                                <th>P.Point (4-16th)</th>
+                                <th>1st</th>
+                                <th>2nd</th>
+                                <th>3rd</th>
+                                <th>B.Challenge</th>
+                                <th>S.Challenge</th>
+                                <th>Shared</th>
+                                <th>No s.s.</th>
+                                <th>Penalty</th>
+                                <th>Redeemed Items</th>
+                                <th>Points</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
                 <div class="pagination">
                     <button id="prevDetailsPage" onclick="changeDetailsPage(-1)">Previous</button>
                     <span id="detailsPageInfo"></span>
@@ -187,25 +193,27 @@
         <!-- Redeemable Items Section: Displays available items for players to view -->
         <div id="redeemableItems" class="section hidden">
             <h2>Redeemable Items</h2>
-            <table id="itemsTable">
-                <thead>
-                    <tr>
-                        <th>Points</th>
-                        <th>Item</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>5500</td><td>Random SV Booster Box X 1</td></tr>
-                    <tr><td>1300</td><td>Random SV Booster Bundle X 1</td></tr>
-                    <tr><td>1000</td><td>Mystery Gift X 10 (Guaranteed Hits in 2)</td></tr>
-                    <tr><td>600</td><td>Random SV Booster Pack X 3</td></tr>
-                    <tr><td>400</td><td>Discover Collectibles Playmat X 1</td></tr>
-                    <tr><td>300</td><td>Mystery Gift X 3 (High Chance Hits in 1)</td></tr>
-                    <tr><td>220</td><td>Random SV Booster Pack X 1</td></tr>
-                    <tr><td>100</td><td>Mystery Gift X 1</td></tr>
-                    <tr><td>20</td><td>Bro Hug X 1</td></tr>
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table id="itemsTable">
+                    <thead>
+                        <tr>
+                            <th>Points</th>
+                            <th>Item</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>5500</td><td>Random SV Booster Box X 1</td></tr>
+                        <tr><td>1300</td><td>Random SV Booster Bundle X 1</td></tr>
+                        <tr><td>1000</td><td>Mystery Gift X 10 (Guaranteed Hits in 2)</td></tr>
+                        <tr><td>600</td><td>Random SV Booster Pack X 3</td></tr>
+                        <tr><td>400</td><td>Discover Collectibles Playmat X 1</td></tr>
+                        <tr><td>300</td><td>Mystery Gift X 3 (High Chance Hits in 1)</td></tr>
+                        <tr><td>220</td><td>Random SV Booster Pack X 1</td></tr>
+                        <tr><td>100</td><td>Mystery Gift X 1</td></tr>
+                        <tr><td>20</td><td>Bro Hug X 1</td></tr>
+                    </tbody>
+                </table>
+            </div>
             <button class="back-button" onclick="backToHome()">Back to Home</button>
         </div>
 
@@ -217,10 +225,15 @@
             const entriesPerPage = 10; //Player per page
             const detailsPerPage = 20; //details per page
             let currentPlayers = [];
-            let currentTournamentEntries = [];
+
+            // Debug function to log data issues
+            function debugLog(message) {
+                console.log(`[DEBUG ${new Date().toLocaleString()}] ${message}`);
+            }
 
             function saveData() {
                 localStorage.setItem('tournamentData', JSON.stringify(data));
+                debugLog(`Saved data to localStorage: ${JSON.stringify(data)}`);
             }
 
             function backToHome() {
@@ -245,6 +258,7 @@
             }
 
             function showPlayerView() {
+                debugLog('showPlayerView triggered');
                 hideAll();
                 document.getElementById('playerView').classList.remove('hidden');
                 document.getElementById('playerDetails').classList.add('hidden');
@@ -525,6 +539,7 @@
             }
 
             function renderLeaderboard() {
+                debugLog(`Rendering leaderboard, data length: ${data.length}`);
                 const searchTerm = document.getElementById('leaderboardSearch').value.trim().toLowerCase();
                 const players = {};
                 data.filter(e => !e.isRedemption).forEach(entry => {
@@ -542,6 +557,7 @@
                     players[playerLower].total += (entry.points || 0);
                 });
                 currentPlayers = Object.values(players).sort((a, b) => b.total - a.total);
+                debugLog(`Players after processing: ${JSON.stringify(currentPlayers)}`);
                 if (searchTerm) {
                     currentPlayers = currentPlayers.filter(p => p.name.toLowerCase().includes(searchTerm));
                 }
@@ -551,17 +567,25 @@
                 const paginatedPlayers = currentPlayers.slice(start, end);
                 const tbody = document.getElementById('leaderboardTable').querySelector('tbody');
                 tbody.innerHTML = '';
-                paginatedPlayers.forEach((p, index) => {
-                    const globalIndex = start + index + 1;
+                if (paginatedPlayers.length === 0) {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${globalIndex}</td>
-                        <td><a href="#" onclick="showPlayerDetails('${p.name}', 1)">${p.name}</a></td>
-                        <td>${p.total}</td>
-                    `;
+                    tr.innerHTML = '<td colspan="3">No players found. Add entries in the Moderator Panel.</td>';
                     tbody.appendChild(tr);
-                });
-                document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+                    debugLog('No players to display in leaderboard');
+                } else {
+                    paginatedPlayers.forEach((p, index) => {
+                        const globalIndex = start + index + 1;
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${globalIndex}</td>
+                            <td><a href="#" onclick="showPlayerDetails('${p.name}', 1)">${p.name}</a></td>
+                            <td>${p.total}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                    debugLog(`Rendered ${paginatedPlayers.length} players on page ${currentPage}`);
+                }
+                document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages || 1}`;
                 document.getElementById('prevPage').disabled = currentPage === 1;
                 document.getElementById('nextPage').disabled = currentPage === totalPages || totalPages === 0;
             }
@@ -572,6 +596,7 @@
             }
 
             function showPlayerDetails(player, page = 1) {
+                debugLog(`Showing details for player: ${player}, page: ${page}`);
                 currentDetailsPage = page;
                 document.getElementById('playerDetailsName').textContent = `${player} Details`;
                 const entries = data.filter(e => e.player.toLowerCase() === player.toLowerCase()).sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -581,17 +606,23 @@
                 const paginatedEntries = entries.slice(start, end);
                 const tbody = document.getElementById('detailsTable').querySelector('tbody');
                 tbody.innerHTML = '';
-                paginatedEntries.forEach(entry => {
+                if (paginatedEntries.length === 0) {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${entry.date}</td>`;
-                    ACHIEVEMENTS.forEach(ach => {
-                        tr.innerHTML += `<td>${entry.achievements && entry.achievements[ach] ? '✓' : '-'}</td>`;
-                    });
-                    const itemsText = entry.isRedemption ? (entry.items || []).map(item => `${item.name} (x${item.quantity})`).join(', ') : '-';
-                    tr.innerHTML += `<td>${itemsText}</td><td>${entry.points}</td>`;
+                    tr.innerHTML = '<td colspan="13">No entries found for this player.</td>';
                     tbody.appendChild(tr);
-                });
-                document.getElementById('detailsPageInfo').textContent = `Page ${currentDetailsPage} of ${totalPages}`;
+                } else {
+                    paginatedEntries.forEach(entry => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `<td>${entry.date}</td>`;
+                        ACHIEVEMENTS.forEach(ach => {
+                            tr.innerHTML += `<td>${entry.achievements && entry.achievements[ach] ? '✓' : '-'}</td>`;
+                        });
+                        const itemsText = entry.isRedemption ? (entry.items || []).map(item => `${item.name} (x${item.quantity})`).join(', ') : '-';
+                        tr.innerHTML += `<td>${itemsText}</td><td>${entry.points}</td>`;
+                        tbody.appendChild(tr);
+                    });
+                }
+                document.getElementById('detailsPageInfo').textContent = `Page ${currentDetailsPage} of ${totalPages || 1}`;
                 document.getElementById('prevDetailsPage').disabled = currentDetailsPage === 1;
                 document.getElementById('nextDetailsPage').disabled = currentDetailsPage === totalPages;
                 document.getElementById('playerDetails').classList.remove('hidden');
@@ -612,6 +643,12 @@
                 document.getElementById('playerDetails').classList.add('hidden');
                 renderLeaderboard();
             }
+
+            // Initialize leaderboard on page load
+            document.addEventListener('DOMContentLoaded', () => {
+                debugLog('Page loaded, initializing leaderboard');
+                renderLeaderboard();
+            });
         </script>
     </div>
 </body>
