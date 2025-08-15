@@ -1,0 +1,618 @@
+<!-- Homepage Section: Entry point with buttons to access Moderator, Player, and Redeemable Items views -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon TCG Pocket Tournament Points System</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="data.js"></script>
+</head>
+<body>
+    <div class="container">
+        <img id="logo" src="pocketlogo.jpg" alt="Pokémon TCG Logo">
+        <h1>Pokémon TCG Pocket Tournament Points System</h1>
+        <div id="homePage" class="section homepage">
+            <button onclick="showModeratorLogin()">Moderator</button>
+            <button onclick="showPlayerView()">Player</button>
+            <button onclick="showRedeemableItems()">Redeemable Items</button>
+        </div>
+
+        <!-- Moderator Login Section: Form for moderator login with ID and password -->
+        <div id="moderatorLogin" class="section hidden moderator-login">
+            <h2>Moderator Login</h2>
+            <div class="login-form">
+                <label for="modId">ID:</label>
+                <input type="text" id="modId">
+                <label for="modPass">Password:</label>
+                <div class="password-container">
+                    <input type="password" id="modPass">
+                    <label><input type="checkbox" id="showPassword" onclick="togglePassword()"> Show Password</label>
+                </div>
+                <button onclick="loginModerator()">Login</button>
+                <span id="loginError" class="error"></span>
+                <button class="back-button" onclick="backToHome()">Back to Home</button>
+            </div>
+        </div>
+
+        <!-- Moderator Panel Section: Manage tournament entries, item redemptions, and clear player details -->
+        <div id="moderatorPanel" class="section hidden">
+            <h2>Moderator Panel</h2>
+            <div class="form-section">
+                <h3>Add Tournament Entries</h3>
+                <label for="tournamentDate">Tournament Date:</label>
+                <input type="date" id="tournamentDate" onchange="loadTournamentEntries()">
+                <button onclick="addPlayerEntry()">Add Player</button>
+                <table id="playerEntries">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Points</th>
+                            <th>P.Streak</th>
+                            <th>P.Point</th>
+                            <th>1st</th>
+                            <th>2nd</th>
+                            <th>3rd</th>
+                            <th>B.Challenge</th>
+                            <th>S.Challenge</th>
+                            <th>Shared</th>
+                            <th>No s.s.</th>
+                            <th>Penalty</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class="button-group">
+                    <button onclick="saveTournament()">Save Tournament</button>
+                    <button onclick="editTournament()">Edit Tournament</button>
+                    <button class="remove-btn" onclick="removeTournament()">Remove Tournament</button>
+                </div>
+                <div id="editTournamentForm" class="hidden">
+                    <h3>Edit Tournament Entry</h3>
+                    <label for="editPlayerName">Player:</label>
+                    <input type="text" id="editPlayerName" list="playerList">
+                    <label for="editPoints">Points:</label>
+                    <input type="number" id="editPoints">
+                    <h4>Achievements</h4>
+                    <label><input type="checkbox" id="editParticipantStreak"> P.Streak</label><br>
+                    <label><input type="checkbox" id="editParticipantPoint"> P.Point</label><br>
+                    <label><input type="checkbox" id="editFirstPlace"> 1st</label><br>
+                    <label><input type="checkbox" id="editSecondPlace"> 2nd</label><br>
+                    <label><input type="checkbox" id="editThirdPlace"> 3rd</label><br>
+                    <label><input type="checkbox" id="editBigChallenge"> B.Challenge</label><br>
+                    <label><input type="checkbox" id="editSmallChallenge"> S.Challenge</label><br>
+                    <label><input type="checkbox" id="editShared"> Shared</label><br>
+                    <label><input type="checkbox" id="editNoSS"> No s.s.</label><br>
+                    <label><input type="checkbox" id="editPenalty"> Penalty</label><br>
+                    <button onclick="updatePlayerEntry()">Update Entry</button>
+                </div>
+                <h3>Redeem Items</h3>
+                <label for="redeemDate">Date:</label>
+                <input type="date" id="redeemDate">
+                <label for="redeemPlayer">Player:</label>
+                <input type="text" id="redeemPlayer" list="playerList">
+                <div class="redeem-items">
+                    <div><label><input type="number" id="item5500" min="0"> Random SV Booster Box X 1 (5500 points)</label></div>
+                    <div><label><input type="number" id="item1300" min="0"> Random SV Booster Bundle X 1 (1300 points)</label></div>
+                    <div><label><input type="number" id="item1000" min="0"> Mystery Gift X 10 (1000 points)</label></div>
+                    <div><label><input type="number" id="item600" min="0"> Random SV Booster Pack X 3 (600 points)</label></div>
+                    <div><label><input type="number" id="item400" min="0"> Discover Collectibles Playmat X 1 (400 points)</label></div>
+                    <div><label><input type="number" id="item300" min="0"> Mystery Gift X 3 (300 points)</label></div>
+                    <div><label><input type="number" id="item220" min="0"> Random SV Booster Pack X 1 (220 points)</label></div>
+                    <div><label><input type="number" id="item100" min="0"> Mystery Gift X 1 (100 points)</label></div>
+                    <div><label><input type="number" id="item20" min="0"> Bro Hug X 1 (20 points)</label></div>
+                </div>
+                <button onclick="saveRedemption()">Save Redemption</button>
+                <h3>Clear Player Details</h3>
+                <label for="clearPlayerName">Player:</label>
+                <input type="text" id="clearPlayerName" list="playerList">
+                <label for="clearModId">Moderator ID:</label>
+                <input type="text" id="clearModId">
+                <label for="clearModPass">Password:</label>
+                <div class="password-container">
+                    <input type="password" id="clearModPass">
+                    <label><input type="checkbox" id="clearShowPassword" onclick="toggleClearPassword()"> Show Password</label>
+                </div>
+                <button class="remove-btn" onclick="clearPlayerDetails()">Clear Player Details</button>
+                <span id="clearError" class="error"></span>
+                <div class="button-group">
+                    <button onclick="logoutModerator()">Logout</button>
+                    <button class="back-button" onclick="backToHome()">Back to Home</button>
+                </div>
+            </div>
+            <datalist id="playerList"></datalist>
+        </div>
+
+        <!-- Player View Section: Displays leaderboard with search bar and player details -->
+        <div id="playerView" class="section hidden">
+            <h2>Player Leaderboard</h2>
+            <div class="search-bar">
+                <label for="leaderboardSearch">Search Player:</label>
+                <input type="text" id="leaderboardSearch" oninput="filterLeaderboard()" placeholder="Enter player name">
+            </div>
+            <table id="leaderboardTable">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Total Points</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div class="pagination">
+                <button id="prevPage" onclick="changePage(-1)">Previous</button>
+                <span id="pageInfo"></span>
+                <button id="nextPage" onclick="changePage(1)">Next</button>
+            </div>
+            <div class="button-group">
+                <button class="back-button" onclick="backToHome()">Back to Home</button>
+                <button onclick="alert('Feature coming soon!')">View Summary</button>
+            </div>
+            <div id="playerDetails" class="hidden">
+                <h3 id="playerDetailsName"></h3>
+                <table id="detailsTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>P.Streak</th>
+                            <th>P.Point</th>
+                            <th>1st</th>
+                            <th>2nd</th>
+                            <th>3rd</th>
+                            <th>B.Challenge</th>
+                            <th>S.Challenge</th>
+                            <th>Shared</th>
+                            <th>No s.s.</th>
+                            <th>Penalty</th>
+                            <th>Redeemed Items</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class="pagination">
+                    <button id="prevDetailsPage" onclick="changeDetailsPage(-1)">Previous</button>
+                    <span id="detailsPageInfo"></span>
+                    <button id="nextDetailsPage" onclick="changeDetailsPage(1)">Next</button>
+                </div>
+                <div class="button-group">
+                    <button class="back-button" onclick="backToLeaderboard()">Back to Leaderboard</button>
+                    <button class="back-button" onclick="backToHome()">Back to Home</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Redeemable Items Section: Displays available items for players to view -->
+        <div id="redeemableItems" class="section hidden">
+            <h2>Redeemable Items</h2>
+            <table id="itemsTable">
+                <thead>
+                    <tr>
+                        <th>Points</th>
+                        <th>Item</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>5500</td><td>Random SV Booster Box X 1</td></tr>
+                    <tr><td>1300</td><td>Random SV Booster Bundle X 1</td></tr>
+                    <tr><td>1000</td><td>Mystery Gift X 10 (Guaranteed Hits in 2)</td></tr>
+                    <tr><td>600</td><td>Random SV Booster Pack X 3</td></tr>
+                    <tr><td>400</td><td>Discover Collectibles Playmat X 1</td></tr>
+                    <tr><td>300</td><td>Mystery Gift X 3 (High Chance Hits in 1)</td></tr>
+                    <tr><td>220</td><td>Random SV Booster Pack X 1</td></tr>
+                    <tr><td>100</td><td>Mystery Gift X 1</td></tr>
+                    <tr><td>20</td><td>Bro Hug X 1</td></tr>
+                </tbody>
+            </table>
+            <button class="back-button" onclick="backToHome()">Back to Home</button>
+        </div>
+
+        <!-- JavaScript: Handles all functionality -->
+        <script>
+            let data = JSON.parse(localStorage.getItem('tournamentData')) || [];
+            let currentPage = 1;
+            let currentDetailsPage = 1;
+            const entriesPerPage = 10; //Player per page
+            const detailsPerPage = 20; //details per page
+            let currentPlayers = [];
+            let currentTournamentEntries = [];
+
+            function saveData() {
+                localStorage.setItem('tournamentData', JSON.stringify(data));
+            }
+
+            function backToHome() {
+                hideAll();
+                document.getElementById('homePage').classList.remove('hidden');
+                currentTournamentEntries = [];
+                document.getElementById('playerEntries').querySelector('tbody').innerHTML = '';
+                document.getElementById('playerDetails').classList.add('hidden');
+                document.getElementById('leaderboardSearch').value = '';
+                currentPage = 1;
+                renderLeaderboard();
+            }
+
+            function showModeratorLogin() {
+                hideAll();
+                document.getElementById('moderatorLogin').classList.remove('hidden');
+                document.getElementById('modId').value = '';
+                document.getElementById('modPass').value = '';
+                document.getElementById('showPassword').checked = false;
+                document.getElementById('modPass').type = 'password';
+                document.getElementById('loginError').textContent = '';
+            }
+
+            function showPlayerView() {
+                hideAll();
+                document.getElementById('playerView').classList.remove('hidden');
+                document.getElementById('playerDetails').classList.add('hidden');
+                document.getElementById('leaderboardSearch').value = '';
+                currentPage = 1;
+                renderLeaderboard();
+            }
+
+            function showRedeemableItems() {
+                hideAll();
+                document.getElementById('redeemableItems').classList.remove('hidden');
+            }
+
+            function hideAll() {
+                document.querySelectorAll('.section:not(.hidden)').forEach(el => el.classList.add('hidden'));
+            }
+
+            function togglePassword() {
+                const passInput = document.getElementById('modPass');
+                passInput.type = passInput.type === 'password' ? 'text' : 'password';
+            }
+
+            function toggleClearPassword() {
+                const passInput = document.getElementById('clearModPass');
+                passInput.type = passInput.type === 'password' ? 'text' : 'password';
+            }
+
+            function loginModerator() {
+                const id = document.getElementById('modId').value;
+                const pass = document.getElementById('modPass').value;
+                if (id === 'mod01' && pass === 'imboss') {
+                    hideAll();
+                    document.getElementById('moderatorPanel').classList.remove('hidden');
+                    document.getElementById('loginError').textContent = '';
+                    populatePlayerDatalist();
+                } else {
+                    document.getElementById('loginError').textContent = 'Wrong ID or Password';
+                }
+            }
+
+            function logoutModerator() {
+                hideAll();
+                document.getElementById('homePage').classList.remove('hidden');
+                currentTournamentEntries = [];
+                document.getElementById('playerEntries').querySelector('tbody').innerHTML = '';
+            }
+
+            function populatePlayerDatalist() {
+                const datalist = document.getElementById('playerList');
+                datalist.innerHTML = '';
+                PLAYERS.forEach(player => {
+                    const option = document.createElement('option');
+                    option.value = player;
+                    datalist.appendChild(option);
+                });
+            }
+
+            function addPlayerEntry() {
+                const date = document.getElementById('tournamentDate').value;
+                if (!date) {
+                    alert('Please select a tournament date.');
+                    return;
+                }
+                const entryId = currentTournamentEntries.length;
+                currentTournamentEntries.push({ id: entryId, date });
+                const tbody = document.getElementById('playerEntries').querySelector('tbody');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><input type="text" id="playerName${entryId}" list="playerList" style="width: 120px;"></td>
+                    <td><input type="number" id="points${entryId}" style="width: 60px;"></td>
+                    ${ACHIEVEMENTS.map(ach => `<td><input type="checkbox" id="${ach}${entryId}"></td>`).join('')}
+                    <td><button class="remove-btn" onclick="removePlayerEntry(${entryId})">Remove</button></td>
+                `;
+                tbody.appendChild(tr);
+            }
+
+            function removePlayerEntry(entryId) {
+                currentTournamentEntries = currentTournamentEntries.filter(e => e.id !== entryId);
+                const tbody = document.getElementById('playerEntries').querySelector('tbody');
+                tbody.innerHTML = '';
+                currentTournamentEntries.forEach((entry, index) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><input type="text" id="playerName${index}" list="playerList" style="width: 120px;" value="${entry.player || ''}"></td>
+                        <td><input type="number" id="points${index}" style="width: 60px;" value="${entry.points || ''}"></td>
+                        ${ACHIEVEMENTS.map(ach => `<td><input type="checkbox" id="${ach}${index}" ${entry.achievements && entry.achievements[ach] ? 'checked' : ''}></td>`).join('')}
+                        <td><button class="remove-btn" onclick="removePlayerEntry(${index})">Remove</button></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            function loadTournamentEntries() {
+                const date = document.getElementById('tournamentDate').value;
+                currentTournamentEntries = [];
+                const tbody = document.getElementById('playerEntries').querySelector('tbody');
+                tbody.innerHTML = '';
+                if (date) {
+                    const entries = data.filter(e => e.date === date && !e.isRedemption);
+                    entries.forEach((entry, index) => {
+                        currentTournamentEntries.push({ id: index, date, player: entry.player, points: entry.points, achievements: entry.achievements });
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td><input type="text" id="playerName${index}" list="playerList" style="width: 120px;" value="${entry.player}"></td>
+                            <td><input type="number" id="points${index}" style="width: 60px;" value="${entry.points || ''}"></td>
+                            ${ACHIEVEMENTS.map(ach => `<td><input type="checkbox" id="${ach}${index}" ${entry.achievements && entry.achievements[ach] ? 'checked' : ''}></td>`).join('')}
+                            <td><button class="remove-btn" onclick="removePlayerEntry(${index})">Remove</button></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            }
+
+            function saveTournament() {
+                const date = document.getElementById('tournamentDate').value;
+                if (!date) {
+                    alert('Please select a tournament date.');
+                    return;
+                }
+                let validEntries = 0;
+                currentTournamentEntries.forEach((entry, index) => {
+                    const player = document.getElementById(`playerName${index}`).value.trim();
+                    const points = parseInt(document.getElementById(`points${index}`).value) || 0;
+                    if (player) {
+                        const achievements = {};
+                        ACHIEVEMENTS.forEach(ach => {
+                            achievements[ach] = document.getElementById(`${ach}${index}`).checked;
+                        });
+                        const existingIndex = data.findIndex(e => e.date === date && e.player.toLowerCase() === player.toLowerCase() && !e.isRedemption);
+                        if (existingIndex !== -1) {
+                            data[existingIndex] = { date, player, achievements, points, isRedemption: false };
+                        } else {
+                            data.push({ date, player, achievements, points, isRedemption: false });
+                        }
+                        validEntries++;
+                    }
+                });
+                if (validEntries === 0) {
+                    alert('Please add at least one player with a name.');
+                    return;
+                }
+                saveData();
+                alert('Tournament entries saved.');
+                currentTournamentEntries = [];
+                document.getElementById('playerEntries').querySelector('tbody').innerHTML = '';
+                document.getElementById('tournamentDate').value = '';
+                renderLeaderboard();
+            }
+
+            function editTournament() {
+                const date = document.getElementById('tournamentDate').value;
+                const player = document.getElementById('editPlayerName').value.trim();
+                if (!date || !player) {
+                    alert('Please select a date and player.');
+                    return;
+                }
+                const entry = data.find(e => e.date === date && e.player.toLowerCase() === player.toLowerCase() && !e.isRedemption);
+                if (entry) {
+                    document.getElementById('editPoints').value = entry.points || 0;
+                    ACHIEVEMENTS.forEach(ach => {
+                        document.getElementById(`edit${ach.charAt(0).toUpperCase() + ach.slice(1)}`).checked = entry.achievements[ach];
+                    });
+                    document.getElementById('editTournamentForm').classList.remove('hidden');
+                } else {
+                    alert('No entry found for this player and date.');
+                }
+            }
+
+            function updatePlayerEntry() {
+                const date = document.getElementById('tournamentDate').value;
+                const player = document.getElementById('editPlayerName').value.trim();
+                const points = parseInt(document.getElementById('editPoints').value) || 0;
+                if (!date || !player) {
+                    alert('Please select a date and player.');
+                    return;
+                }
+                const achievements = {};
+                ACHIEVEMENTS.forEach(ach => {
+                    achievements[ach] = document.getElementById(`edit${ach.charAt(0).toUpperCase() + ach.slice(1)}`).checked;
+                });
+                const index = data.findIndex(e => e.date === date && e.player.toLowerCase() === player.toLowerCase() && !e.isRedemption);
+                if (index !== -1) {
+                    data[index] = { date, player, achievements, points, isRedemption: false };
+                    saveData();
+                    alert('Entry updated.');
+                    document.getElementById('editTournamentForm').classList.add('hidden');
+                    document.getElementById('editPlayerName').value = '';
+                    document.getElementById('editPoints').value = '';
+                    renderLeaderboard();
+                } else {
+                    alert('No entry found for this player and date.');
+                }
+            }
+
+            function removeTournament() {
+                const date = document.getElementById('tournamentDate').value;
+                if (!date) {
+                    alert('Please select a tournament date.');
+                    return;
+                }
+                const entries = data.filter(e => e.date === date && !e.isRedemption);
+                if (entries.length > 0) {
+                    if (confirm(`Are you sure you want to remove all entries for ${date}?`)) {
+                        data = data.filter(e => !(e.date === date && !e.isRedemption));
+                        saveData();
+                        alert('Tournament entries removed.');
+                        document.getElementById('tournamentDate').value = '';
+                        renderLeaderboard();
+                    }
+                } else {
+                    alert('No entries found for this date.');
+                }
+            }
+
+            function clearPlayerDetails() {
+                const player = document.getElementById('clearPlayerName').value.trim();
+                const id = document.getElementById('clearModId').value;
+                const pass = document.getElementById('clearModPass').value;
+                if (!player) {
+                    document.getElementById('clearError').textContent = 'Please select a player.';
+                    return;
+                }
+                if (id !== 'mod01' || pass !== 'imboss') {
+                    document.getElementById('clearError').textContent = 'Wrong ID or Password';
+                    return;
+                }
+                const entries = data.filter(e => e.player.toLowerCase() === player.toLowerCase());
+                if (entries.length === 0) {
+                    document.getElementById('clearError').textContent = 'No entries found for this player.';
+                    return;
+                }
+                if (confirm(`Are you sure you want to clear all details for ${player}? This cannot be undone.`)) {
+                    data = data.filter(e => e.player.toLowerCase() !== player.toLowerCase());
+                    saveData();
+                    alert('Player details cleared.');
+                    document.getElementById('clearPlayerName').value = '';
+                    document.getElementById('clearModId').value = '';
+                    document.getElementById('clearModPass').value = '';
+                    document.getElementById('clearShowPassword').checked = false;
+                    document.getElementById('clearModPass').type = 'password';
+                    document.getElementById('clearError').textContent = '';
+                    renderLeaderboard();
+                }
+            }
+
+            function saveRedemption() {
+                const date = document.getElementById('redeemDate').value;
+                const player = document.getElementById('redeemPlayer').value.trim();
+                if (!date || !player) {
+                    alert('Please select a date and player.');
+                    return;
+                }
+                let totalPoints = 0;
+                const items = [];
+                Object.keys(REDEEMABLE_ITEMS).forEach(itemId => {
+                    const quantity = parseInt(document.getElementById(itemId).value) || 0;
+                    if (quantity > 0) {
+                        totalPoints += quantity * REDEEMABLE_ITEMS[itemId].points;
+                        items.push({ name: REDEEMABLE_ITEMS[itemId].name, quantity });
+                    }
+                });
+                if (totalPoints === 0) {
+                    alert('Please select at least one item to redeem.');
+                    return;
+                }
+                const playerTotalPoints = data.filter(e => e.player.toLowerCase() === player.toLowerCase() && !e.isRedemption).reduce((sum, e) => sum + (e.points || 0), 0);
+                if (playerTotalPoints < totalPoints) {
+                    alert('Player does not have enough points.');
+                    return;
+                }
+                data.push({ date, player, points: -totalPoints, items, isRedemption: true });
+                saveData();
+                alert('Redemption saved.');
+                Object.keys(REDEEMABLE_ITEMS).forEach(itemId => document.getElementById(itemId).value = '');
+                document.getElementById('redeemDate').value = '';
+                document.getElementById('redeemPlayer').value = '';
+                renderLeaderboard();
+            }
+
+            function renderLeaderboard() {
+                const searchTerm = document.getElementById('leaderboardSearch').value.trim().toLowerCase();
+                const players = {};
+                data.filter(e => !e.isRedemption).forEach(entry => {
+                    const playerLower = entry.player.toLowerCase();
+                    if (!players[playerLower]) {
+                        players[playerLower] = { name: entry.player, total: 0 };
+                    }
+                    players[playerLower].total += (entry.points || 0);
+                });
+                data.filter(e => e.isRedemption).forEach(entry => {
+                    const playerLower = entry.player.toLowerCase();
+                    if (!players[playerLower]) {
+                        players[playerLower] = { name: entry.player, total: 0 };
+                    }
+                    players[playerLower].total += (entry.points || 0);
+                });
+                currentPlayers = Object.values(players).sort((a, b) => b.total - a.total);
+                if (searchTerm) {
+                    currentPlayers = currentPlayers.filter(p => p.name.toLowerCase().includes(searchTerm));
+                }
+                const totalPages = Math.ceil(currentPlayers.length / entriesPerPage);
+                const start = (currentPage - 1) * entriesPerPage;
+                const end = start + entriesPerPage;
+                const paginatedPlayers = currentPlayers.slice(start, end);
+                const tbody = document.getElementById('leaderboardTable').querySelector('tbody');
+                tbody.innerHTML = '';
+                paginatedPlayers.forEach((p, index) => {
+                    const globalIndex = start + index + 1;
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${globalIndex}</td>
+                        <td><a href="#" onclick="showPlayerDetails('${p.name}', 1)">${p.name}</a></td>
+                        <td>${p.total}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+                document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+                document.getElementById('prevPage').disabled = currentPage === 1;
+                document.getElementById('nextPage').disabled = currentPage === totalPages || totalPages === 0;
+            }
+
+            function filterLeaderboard() {
+                currentPage = 1;
+                renderLeaderboard();
+            }
+
+            function showPlayerDetails(player, page = 1) {
+                currentDetailsPage = page;
+                document.getElementById('playerDetailsName').textContent = `${player} Details`;
+                const entries = data.filter(e => e.player.toLowerCase() === player.toLowerCase()).sort((a, b) => new Date(b.date) - new Date(a.date));
+                const totalPages = Math.ceil(entries.length / detailsPerPage);
+                const start = (currentDetailsPage - 1) * detailsPerPage;
+                const end = start + detailsPerPage;
+                const paginatedEntries = entries.slice(start, end);
+                const tbody = document.getElementById('detailsTable').querySelector('tbody');
+                tbody.innerHTML = '';
+                paginatedEntries.forEach(entry => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${entry.date}</td>`;
+                    ACHIEVEMENTS.forEach(ach => {
+                        tr.innerHTML += `<td>${entry.achievements && entry.achievements[ach] ? '✓' : '-'}</td>`;
+                    });
+                    const itemsText = entry.isRedemption ? (entry.items || []).map(item => `${item.name} (x${item.quantity})`).join(', ') : '-';
+                    tr.innerHTML += `<td>${itemsText}</td><td>${entry.points}</td>`;
+                    tbody.appendChild(tr);
+                });
+                document.getElementById('detailsPageInfo').textContent = `Page ${currentDetailsPage} of ${totalPages}`;
+                document.getElementById('prevDetailsPage').disabled = currentDetailsPage === 1;
+                document.getElementById('nextDetailsPage').disabled = currentDetailsPage === totalPages;
+                document.getElementById('playerDetails').classList.remove('hidden');
+            }
+
+            function changePage(direction) {
+                currentPage += direction;
+                renderLeaderboard();
+            }
+
+            function changeDetailsPage(direction) {
+                const player = document.getElementById('playerDetailsName').textContent.replace(' Details', '');
+                currentDetailsPage += direction;
+                showPlayerDetails(player, currentDetailsPage);
+            }
+
+            function backToLeaderboard() {
+                document.getElementById('playerDetails').classList.add('hidden');
+                renderLeaderboard();
+            }
+        </script>
+    </div>
+</body>
+</html>
