@@ -4,7 +4,7 @@ body {
     padding: 0;
     background-image: url('background01.png');
     background-size: cover;
-    background-position: center; /* Center background image */
+    background-position: center;
     background-attachment: fixed;
     color: #333;
     display: flex;
@@ -14,9 +14,9 @@ body {
 }
 
 .container {
-    width: 90%; /* Slightly wider for better content fit */
+    width: 90%;
     max-width: 1200px;
-    margin: 10rem auto; /* Reduced top margin for mobile */
+    margin: 10rem auto;
     background-color: rgba(245, 154, 126, 0.95);
     padding: 1rem;
     border-radius: 8px;
@@ -36,35 +36,18 @@ body {
     text-align: center;
 }
 
-.moderator-login {
-    text-align: center;
-}
-
-.login-form {
-    display: inline-block;
-    text-align: left;
-}
-
-.form-section {
-    background: #fff;
-    padding: 1rem;
-    border-radius: 6px;
-    margin-top: 1rem;
-    box-sizing: border-box;
-}
-
 .table-container {
     width: 100%;
-    overflow-x: auto; /* Enable horizontal scrolling */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     margin: 1rem 0;
-    box-sizing: border-box; /* Ensure padding/margins stay within container */
+    box-sizing: border-box;
 }
 
 table { 
     border-collapse: collapse;
     width: 100%;
-    max-width: 100%; /* Prevent table from exceeding container width */
+    max-width: 100%;
     table-layout: auto;
 }
 
@@ -73,19 +56,12 @@ th, td {
     padding: 0.5rem;
     text-align: center;
     font-size: 0.8rem;
-    white-space: nowrap; /* Prevent text wrapping in cells */
+    white-space: nowrap;
 }
 
 th { 
     background-color: #f0f0f0;
     font-weight: bold;
-}
-
-.error { 
-    color: red;
-    margin-left: 0.5rem;
-    display: inline-block;
-    font-size: 0.8rem;
 }
 
 button { 
@@ -104,60 +80,6 @@ button:hover {
     background-color: #cc0000;
 }
 
-.remove-btn {
-    background-color: #ff4c4c;
-}
-
-.remove-btn:hover {
-    background-color: #d43f3f;
-}
-
-input[type="text"], input[type="password"], input[type="date"], input[type="number"], select {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 120px;
-    margin: 0.3rem auto;
-    display: block;
-    font-size: 0.8rem;
-    box-sizing: border-box;
-}
-
-input[type="number"] {
-    width: 60px;
-    display: inline-block;
-}
-
-input[type="checkbox"] {
-    width: 12px;
-    height: 12px;
-    margin: 0.3rem;
-}
-
-label {
-    display: block;
-    margin: 0.5rem auto;
-    font-weight: bold;
-    text-align: center;
-    font-size: 0.8rem;
-}
-
-#logo {
-    display: block;
-    max-width: 200px;
-    margin: 0 auto 1rem;
-}
-
-.password-container {
-    display: center; /* Fixed 'display: center' to valid flex display */
-    align-items: center;
-    justify-content: center;
-}
-
-#showPassword, #clearShowPassword {
-    margin-left: 0.5rem;
-}
-
 .back-button {
     background-color: #3b4cca;
 }
@@ -166,7 +88,24 @@ label {
     background-color: #2a3b9e;
 }
 
-h1, h2, h3, h4 {
+input[type="text"] {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+    margin: 0.3rem auto;
+    display: block;
+    font-size: 0.8rem;
+    box-sizing: border-box;
+}
+
+#logo {
+    display: block;
+    max-width: 200px;
+    margin: 0 auto 1rem;
+}
+
+h1, h2, h3 {
     text-align: center;
     color: #333;
     background: #fff;
@@ -206,18 +145,6 @@ a:hover {
     cursor: not-allowed;
 }
 
-.redeem-items {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 0.5rem;
-    margin: 1rem 0;
-}
-
-.redeem-items div {
-    display: flex;
-    align-items: center;
-}
-
 .search-bar {
     margin: 1rem auto;
     text-align: center;
@@ -235,7 +162,7 @@ a:hover {
 @media (max-width: 1024px) {
     .container {
         width: 95%;
-        margin: 5rem auto; /* Reduced margin for tablet */
+        margin: 5rem auto;
         padding: 0.8rem;
     }
     .table-container {
@@ -243,17 +170,13 @@ a:hover {
         -webkit-overflow-scrolling: touch;
     }
     table {
-        max-width: 100%; /* Ensure table stays within container */
+        max-width: 100%;
     }
     th, td {
         padding: 0.4rem;
         font-size: 0.7rem;
     }
-    input[type="text"], input[type="password"], input[type="date"], input[type="number"], select {
-        width: 100px;
-        font-size: 0.7rem;
-    }
-    .search-bar input {
+    input[type="text"] {
         width: 150px;
         font-size: 0.7rem;
     }
@@ -264,7 +187,7 @@ a:hover {
     #logo {
         max-width: 180px;
     }
-    h1, h2, h3, h4 {
+    h1, h2, h3 {
         font-size: 0.95rem;
         padding: 0.6rem;
     }
@@ -274,7 +197,7 @@ a:hover {
 @media (max-width: 600px) {
     .container {
         width: 100%;
-        margin: 2rem auto; /* Further reduced margin for mobile */
+        margin: 2rem auto;
         padding: 0.5rem;
     }
     .table-container {
@@ -282,17 +205,13 @@ a:hover {
         -webkit-overflow-scrolling: touch;
     }
     table {
-        max-width: 100%; /* Ensure table stays within container */
+        max-width: 100%;
     }
     th, td {
         padding: 0.3rem;
         font-size: 0.6rem;
     }
-    input[type="text"], input[type="password"], input[type="date"], input[type="number"], select {
-        width: 80px;
-        font-size: 0.6rem;
-    }
-    .search-bar input {
+    input[type="text"] {
         width: 120px;
         font-size: 0.6rem;
     }
@@ -300,21 +219,11 @@ a:hover {
         padding: 0.3rem 0.6rem;
         font-size: 0.6rem;
     }
-    .redeem-items {
-        grid-template-columns: 1fr;
-    }
     #logo {
         max-width: 150px;
     }
-    h1, h2, h3, h4 {
+    h1, h2, h3 {
         font-size: 0.85rem;
         padding: 0.5rem;
-    }
-    .password-container {
-        flex-direction: column;
-        align-items: center;
-    }
-    .password-container label {
-        margin: 0.3rem 0;
     }
 }
