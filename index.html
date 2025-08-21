@@ -1,4 +1,3 @@
-<!-- Homepage Section: Entry point with buttons to access Player and Redeemable Items views -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,17 +9,24 @@
     <script src="data.js"></script>
 </head>
 <body>
-    <div class="container">
+    <div class="pokedex-container">
         <img id="logo" src="pocketlogo.jpg" alt="Pokémon TCG Logo">
         <h1>Pokémon TCG Pocket Tournament Points System</h1>
-        <div id="homePage" class="section homepage">
-            <button onclick="showPlayerView()">Player</button>
-            <button onclick="showRedeemableItems()">Redeemable Items</button>
+        <div id="homePage" class="section pokedex-section">
+            <button class="pokeball-btn" onclick="showPlayerView()">Player</button>
+            <button class="pokeball-btn" onclick="showRedeemableItems()">Redeemable Items</button>
+            <button id="toggleMusic" class="pokeball-btn" onclick="toggleMusic()">Toggle Music</button>
         </div>
 
+        <audio id="backgroundMusic" loop>
+            <source src="https://www.pokemon.com/static-assets/content/legacy/pokemon-game-sound-library-en_us.zip" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
         <!-- Player View Section: Displays leaderboard with search bar and player details -->
-        <div id="playerView" class="section hidden">
+        <div id="playerView" class="section pokedex-section hidden">
             <h2>Player Leaderboard</h2>
+            <div id="kingOfTournament" class="king-table"></div>
             <div class="search-bar">
                 <label for="leaderboardSearch">Search Player:</label>
                 <input type="text" id="leaderboardSearch" oninput="filterLeaderboard()" placeholder="Enter player name">
@@ -38,16 +44,19 @@
                 </table>
             </div>
             <div class="pagination">
+                <button id="firstPage" onclick="changePage(0)">First Page</button>
                 <button id="prevPage" onclick="changePage(-1)">Previous</button>
                 <span id="pageInfo"></span>
                 <button id="nextPage" onclick="changePage(1)">Next</button>
+                <button id="lastPage" onclick="changePage(999)">Last Page</button>
             </div>
             <div class="button-group">
-                <button class="back-button" onclick="backToHome()">Back to Home</button>
-                <button onclick="alert('Feature coming soon!')">View Summary</button>
+                <button class="back-button pokeball-btn" onclick="backToHome()">Back to Home</button>
+                <button class="pokeball-btn" onclick="alert('Feature coming soon!')">View Summary</button>
             </div>
-            <div id="playerDetails" class="hidden">
+            <div id="playerDetails" class="section pokedex-section hidden">
                 <h3 id="playerDetailsName"></h3>
+                <div id="playerProfileCard" class="pokemon-card"></div>
                 <div class="table-container">
                     <table id="detailsTable">
                         <thead>
@@ -58,8 +67,8 @@
                                 <th>1st</th>
                                 <th>2nd</th>
                                 <th>3rd</th>
-                                <th>B.Challenge</th>
-                                <th>S.Challenge</th>
+                                <th>B.Cha.</th>
+                                <th>S.Cha.</th>
                                 <th>Shared</th>
                                 <th>No s.s.</th>
                                 <th>Penalty</th>
@@ -71,19 +80,21 @@
                     </table>
                 </div>
                 <div class="pagination">
+                    <button id="firstDetailsPage" onclick="changeDetailsPage(0)">First Page</button>
                     <button id="prevDetailsPage" onclick="changeDetailsPage(-1)">Previous</button>
                     <span id="detailsPageInfo"></span>
                     <button id="nextDetailsPage" onclick="changeDetailsPage(1)">Next</button>
+                    <button id="lastDetailsPage" onclick="changeDetailsPage(999)">Last Page</button>
                 </div>
                 <div class="button-group">
-                    <button class="back-button" onclick="backToLeaderboard()">Back to Leaderboard</button>
-                    <button class="back-button" onclick="backToHome()">Back to Home</button>
+                    <button class="back-button pokeball-btn" onclick="backToLeaderboard()">Back to Leaderboard</button>
+                    <button class="back-button pokeball-btn" onclick="backToHome()">Back to Home</button>
                 </div>
             </div>
         </div>
 
         <!-- Redeemable Items Section: Displays available items for players to view -->
-        <div id="redeemableItems" class="section hidden">
+        <div id="redeemableItems" class="section pokedex-section hidden">
             <h2>Redeemable Items</h2>
             <div class="table-container">
                 <table id="itemsTable">
@@ -106,7 +117,7 @@
                     </tbody>
                 </table>
             </div>
-            <button class="back-button" onclick="backToHome()">Back to Home</button>
+            <button class="back-button pokeball-btn" onclick="backToHome()">Back to Home</button>
         </div>
 
         <!-- JavaScript: Handles player view and redeemable items -->
@@ -118,6 +129,7 @@
             const entriesPerPage = 10; // Players per page
             const detailsPerPage = 20; // Details per page
             let currentPlayers = [];
+            let musicPlaying = false;
 
             // Debug function to log data issues
             function debugLog(message) {
@@ -190,6 +202,19 @@
                 }
             }
 
+            function toggleMusic() {
+                const music = document.getElementById('backgroundMusic');
+                if (musicPlaying) {
+                    music.pause();
+                    musicPlaying = false;
+                    document.getElementById('toggleMusic').textContent = 'Play Music';
+                } else {
+                    music.play();
+                    musicPlaying = true;
+                    document.getElementById('toggleMusic').textContent = 'Pause Music';
+                }
+            }
+
             function backToHome() {
                 hideAll();
                 document.getElementById('homePage').classList.remove('hidden');
@@ -203,6 +228,7 @@
                 debugLog('showPlayerView triggered');
                 hideAll();
                 document.getElementById('playerView').classList.remove('hidden');
+                setTimeout(() => document.getElementById('playerView').classList.add('fade-in'), 10);
                 document.getElementById('playerDetails').classList.add('hidden');
                 document.getElementById('leaderboardSearch').value = '';
                 currentPage = 1;
@@ -212,10 +238,17 @@
             function showRedeemableItems() {
                 hideAll();
                 document.getElementById('redeemableItems').classList.remove('hidden');
+                setTimeout(() => document.getElementById('redeemableItems').classList.add('fade-in'), 10);
             }
 
             function hideAll() {
-                document.querySelectorAll('.section:not(.hidden)').forEach(el => el.classList.add('hidden'));
+                document.querySelectorAll('.section:not(.hidden)').forEach(el => {
+                    el.classList.add('fade-out');
+                    setTimeout(() => {
+                        el.classList.add('hidden');
+                        el.classList.remove('fade-out', 'fade-in');
+                    }, 300);
+                });
             }
 
             function renderLeaderboard() {
@@ -237,7 +270,42 @@
                     players[playerLower].total += (entry.points || 0);
                 });
                 currentPlayers = Object.values(players).sort((a, b) => b.total - a.total);
-                debugLog(`Players after processing: ${JSON.stringify(currentPlayers)}`);
+
+                // Calculate King of the Tournament stats
+                const achievementCounts = {};
+                data.forEach(entry => {
+                    const playerLower = entry.player.toLowerCase();
+                    if (!achievementCounts[playerLower]) {
+                        achievementCounts[playerLower] = {
+                            '1st': 0, '2nd': 0, '3rd': 0, 'B.Challenge': 0, 'S.Challenge': 0
+                        };
+                    }
+                    if (entry.achievements['1st']) achievementCounts[playerLower]['1st']++;
+                    if (entry.achievements['2nd']) achievementCounts[playerLower]['2nd']++;
+                    if (entry.achievements['3rd']) achievementCounts[playerLower]['3rd']++;
+                    if (entry.achievements['B.Challenge']) achievementCounts[playerLower]['B.Challenge']++;
+                    if (entry.achievements['S.Challenge']) achievementCounts[playerLower]['S.Challenge']++;
+                });
+                const kings = {
+                    '1st': Object.entries(achievementCounts).sort((a, b) => b[1]['1st'] - a[1]['1st'])[0],
+                    '2nd': Object.entries(achievementCounts).sort((a, b) => b[1]['2nd'] - a[1]['2nd'])[0],
+                    '3rd': Object.entries(achievementCounts).sort((a, b) => b[1]['3rd'] - a[1]['3rd'])[0],
+                    'B.Challenge': Object.entries(achievementCounts).sort((a, b) => b[1]['B.Challenge'] - a[1]['B.Challenge'])[0],
+                    'S.Challenge': Object.entries(achievementCounts).sort((a, b) => b[1]['S.Challenge'] - a[1]['S.Challenge'])[0]
+                };
+                const kingTable = document.getElementById('kingOfTournament');
+                kingTable.innerHTML = `
+                    <h3>King of the Tournament</h3>
+                    <table>
+                        <tr><th>Category</th><th>Player</th><th>Count</th></tr>
+                        <tr><td>1st Place</td><td>${kings['1st'][0]}</td><td>${kings['1st'][1]['1st']}</td></tr>
+                        <tr><td>2nd Place</td><td>${kings['2nd'][0]}</td><td>${kings['2nd'][1]['2nd']}</td></tr>
+                        <tr><td>3rd Place</td><td>${kings['3rd'][0]}</td><td>${kings['3rd'][1]['3rd']}</td></tr>
+                        <tr><td>Big Challenge</td><td>${kings['B.Challenge'][0]}</td><td>${kings['B.Challenge'][1]['B.Challenge']}</td></tr>
+                        <tr><td>Small Challenge</td><td>${kings['S.Challenge'][0]}</td><td>${kings['S.Challenge'][1]['S.Challenge']}</td></tr>
+                    </table>
+                `;
+
                 if (searchTerm) {
                     currentPlayers = currentPlayers.filter(p => p.name.toLowerCase().includes(searchTerm));
                 }
@@ -266,8 +334,10 @@
                     debugLog(`Rendered ${paginatedPlayers.length} players on page ${currentPage}`);
                 }
                 document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages || 1}`;
+                document.getElementById('firstPage').disabled = currentPage === 1;
                 document.getElementById('prevPage').disabled = currentPage === 1;
                 document.getElementById('nextPage').disabled = currentPage === totalPages || totalPages === 0;
+                document.getElementById('lastPage').disabled = currentPage === totalPages || totalPages === 0;
             }
 
             function filterLeaderboard() {
@@ -286,6 +356,44 @@
                 const paginatedEntries = entries.slice(start, end);
                 const tbody = document.getElementById('detailsTable').querySelector('tbody');
                 tbody.innerHTML = '';
+
+                // Calculate player stats for profile card
+                const playerStats = {
+                    totalPoints: 0,
+                    achievements: {
+                        '1st': 0,
+                        '2nd': 0,
+                        '3rd': 0,
+                        'B.Challenge': 0,
+                        'S.Challenge': 0,
+                        'P.Streak': 0,
+                        'P.Participant': 0
+                    }
+                };
+                entries.forEach(entry => {
+                    playerStats.totalPoints += entry.points || 0;
+                    for (let ach in playerStats.achievements) {
+                        if (entry.achievements[ach]) playerStats.achievements[ach]++;
+                    }
+                });
+
+                // Render player profile card
+                const profileCard = document.getElementById('playerProfileCard');
+                profileCard.innerHTML = `
+                    <div class="pokemon-card-content">
+                        <h4>${player}'s Profile</h4>
+                        <p>Total Points: ${playerStats.totalPoints}</p>
+                        <p>Achievements:</p>
+                        <p>1st x${playerStats.achievements['1st']}</p>
+                        <p>2nd x${playerStats.achievements['2nd']}</p>
+                        <p>3rd x${playerStats.achievements['3rd']}</p>
+                        <p>B.Challenge x${playerStats.achievements['B.Challenge']}</p>
+                        <p>S.Challenge x${playerStats.achievements['S.Challenge']}</p>
+                        <p>P.Streak x${playerStats.achievements['P.Streak']}</p>
+                        <p>Participant x${playerStats.achievements['P.Participant']}</p>
+                    </div>
+                `;
+
                 if (paginatedEntries.length === 0) {
                     const tr = document.createElement('tr');
                     tr.innerHTML = '<td colspan="13">No entries found for this player.</td>';
@@ -306,37 +414,56 @@
                         tr.innerHTML += `<td>${entry.achievements['Shared'] ? 'O' : 'X'}</td>`;
                         tr.innerHTML += `<td>${entry.achievements['No s.s.'] ? 'O' : 'X'}</td>`;
                         tr.innerHTML += `<td>${entry.achievements['Penalty'] ? 'O' : 'X'}</td>`;
-                        const itemsText = entry.isRedemption ? (entry.items || []).map(item => `${item.name} (x${item.quantity || 1})`).join(', ') : '-';
+                        const itemsText = entry.isRedemption ? (entry.items || []).map(item => `${item.name} (x${item.quantity || 1})`).join('<br>') : '-';
                         tr.innerHTML += `<td>${itemsText}</td><td>${entry.points}</td>`;
                         tbody.appendChild(tr);
                     });
                 }
                 document.getElementById('detailsPageInfo').textContent = `Page ${currentDetailsPage} of ${totalPages || 1}`;
+                document.getElementById('firstDetailsPage').disabled = currentDetailsPage === 1;
                 document.getElementById('prevDetailsPage').disabled = currentDetailsPage === 1;
-                document.getElementById('nextDetailsPage').disabled = currentDetailsPage === totalPages;
+                document.getElementById('nextDetailsPage').disabled = currentDetailsPage === totalPages || totalPages === 0;
+                document.getElementById('lastDetailsPage').disabled = currentDetailsPage === totalPages || totalPages === 0;
                 document.getElementById('playerDetails').classList.remove('hidden');
+                setTimeout(() => document.getElementById('playerDetails').classList.add('fade-in'), 10);
             }
 
             function changePage(direction) {
-                currentPage += direction;
+                const totalPages = Math.ceil(currentPlayers.length / entriesPerPage);
+                if (direction === 0) currentPage = 1; // First Page
+                else if (direction === 999) currentPage = totalPages || 1; // Last Page
+                else currentPage += direction;
+                currentPage = Math.max(1, Math.min(currentPage, totalPages || 1));
                 renderLeaderboard();
             }
 
             function changeDetailsPage(direction) {
                 const player = document.getElementById('playerDetailsName').textContent.replace(' Details', '');
-                currentDetailsPage += direction;
+                const entries = data.filter(e => e.player.toLowerCase() === player.toLowerCase());
+                const totalPages = Math.ceil(entries.length / detailsPerPage);
+                if (direction === 0) currentDetailsPage = 1; // First Page
+                else if (direction === 999) currentDetailsPage = totalPages || 1; // Last Page
+                else currentDetailsPage += direction;
+                currentDetailsPage = Math.max(1, Math.min(currentDetailsPage, totalPages || 1));
                 showPlayerDetails(player, currentDetailsPage);
             }
 
             function backToLeaderboard() {
-                document.getElementById('playerDetails').classList.add('hidden');
-                renderLeaderboard();
+                document.getElementById('playerDetails').classList.add('fade-out');
+                setTimeout(() => {
+                    document.getElementById('playerDetails').classList.add('hidden');
+                    document.getElementById('playerDetails').classList.remove('fade-out', 'fade-in');
+                    renderLeaderboard();
+                }, 300);
             }
 
             // Initialize leaderboard on page load
             document.addEventListener('DOMContentLoaded', () => {
                 debugLog('Page loaded, initializing leaderboard');
                 loadData();
+                document.getElementById('backgroundMusic').play();
+                musicPlaying = true;
+                document.getElementById('toggleMusic').textContent = 'Pause Music';
             });
         </script>
     </div>
