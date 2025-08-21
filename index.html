@@ -1,4 +1,4 @@
-<!-- Homepage Section: Entry point with buttons to access Moderator, Player, and Redeemable Items views -->
+<!-- Homepage Section: Entry point with buttons to access Player and Redeemable Items views -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokémon TCG Pocket Tournament Points System</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script src="data.js"></script>
 </head>
 <body>
@@ -13,117 +14,8 @@
         <img id="logo" src="pocketlogo.jpg" alt="Pokémon TCG Logo">
         <h1>Pokémon TCG Pocket Tournament Points System</h1>
         <div id="homePage" class="section homepage">
-            <button onclick="showModeratorLogin()">Moderator</button>
             <button onclick="showPlayerView()">Player</button>
             <button onclick="showRedeemableItems()">Redeemable Items</button>
-        </div>
-
-        <!-- Moderator Login Section: Form for moderator login with ID and password -->
-        <div id="moderatorLogin" class="section hidden moderator-login">
-            <h2>Moderator Login</h2>
-            <div class="login-form">
-                <label for="modId">ID:</label>
-                <input type="text" id="modId">
-                <label for="modPass">Password:</label>
-                <div class="password-container">
-                    <input type="password" id="modPass">
-                    <label><input type="checkbox" id="showPassword" onclick="togglePassword()"> Show Password</label>
-                </div>
-                <button onclick="loginModerator()">Login</button>
-                <span id="loginError" class="error"></span>
-                <button class="back-button" onclick="backToHome()">Back to Home</button>
-            </div>
-        </div>
-
-        <!-- Moderator Panel Section: Manage tournament entries, item redemptions, and clear player details -->
-        <div id="moderatorPanel" class="section hidden">
-            <h2>Moderator Panel</h2>
-            <div class="form-section">
-                <h3>Add Tournament Entries</h3>
-                <label for="tournamentDate">Tournament Date:</label>
-                <input type="date" id="tournamentDate" onchange="loadTournamentEntries()">
-                <button onclick="addPlayerEntry()">Add Player</button>
-                <div class="table-container">
-                    <table id="playerEntries">
-                        <thead>
-                            <tr>
-                                <th>Player</th>
-                                <th>Points</th>
-                                <th>P.Streak</th>
-                                <th>P.Point (4-16th)</th>
-                                <th>1st</th>
-                                <th>2nd</th>
-                                <th>3rd</th>
-                                <th>B.Challenge</th>
-                                <th>S.Challenge</th>
-                                <th>Shared</th>
-                                <th>No s.s.</th>
-                                <th>Penalty</th>
-                                <th>Remove</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div class="button-group">
-                    <button onclick="saveTournament()">Save Tournament</button>
-                    <button onclick="editTournament()">Edit Tournament</button>
-                    <button class="remove-btn" onclick="removeTournament()">Remove Tournament</button>
-                </div>
-                <div id="editTournamentForm" class="hidden">
-                    <h3>Edit Tournament Entry</h3>
-                    <label for="editPlayerName">Player:</label>
-                    <input type="text" id="editPlayerName" list="playerList">
-                    <label for="editPoints">Points:</label>
-                    <input type="number" id="editPoints">
-                    <h4>Achievements</h4>
-                    <label><input type="checkbox" id="editParticipantStreak"> P.Streak</label><br>
-                    <label><input type="checkbox" id="editParticipantPoint"> P.Point</label><br>
-                    <label><input type="checkbox" id="editFirstPlace"> 1st</label><br>
-                    <label><input type="checkbox" id="editSecondPlace"> 2nd</label><br>
-                    <label><input type="checkbox" id="editThirdPlace"> 3rd</label><br>
-                    <label><input type="checkbox" id="editBigChallenge"> B.Challenge</label><br>
-                    <label><input type="checkbox" id="editSmallChallenge"> S.Challenge</label><br>
-                    <label><input type="checkbox" id="editShared"> Shared</label><br>
-                    <label><input type="checkbox" id="editNoSS"> No s.s.</label><br>
-                    <label><input type="checkbox" id="editPenalty"> Penalty</label><br>
-                    <button onclick="updatePlayerEntry()">Update Entry</button>
-                </div>
-                <h3>Redeem Items</h3>
-                <label for="redeemDate">Date:</label>
-                <input type="date" id="redeemDate">
-                <label for="redeemPlayer">Player:</label>
-                <input type="text" id="redeemPlayer" list="playerList">
-                <div class="redeem-items">
-                    <div><label><input type="number" id="item5500" min="0"> Random SV Booster Box X 1 (5500 points)</label></div>
-                    <div><label><input type="number" id="item1300" min="0"> Random SV Booster Bundle X 1 (1300 points)</label></div>
-                    <div><label><input type="number" id="item1000" min="0"> Mystery Gift X 10 (1000 points)</label></div>
-                    <div><label><input type="number" id="item600" min="0"> Random SV Booster Pack X 3 (600 points)</label></div>
-                    <div><label><input type="number" id="item400" min="0"> Discover Collectibles Playmat X 1 (400 points)</label></div>
-                    <div><label><input type="number" id="item300" min="0"> Mystery Gift X 3 (300 points)</label></div>
-                    <div><label><input type="number" id="item220" min="0"> Random SV Booster Pack X 1 (220 points)</label></div>
-                    <div><label><input type="number" id="item100" min="0"> Mystery Gift X 1 (100 points)</label></div>
-                    <div><label><input type="number" id="item20" min="0"> Bro Hug X 1 (20 points)</label></div>
-                </div>
-                <button onclick="saveRedemption()">Save Redemption</button>
-                <h3>Clear Player Details</h3>
-                <label for="clearPlayerName">Player:</label>
-                <input type="text" id="clearPlayerName" list="playerList">
-                <label for="clearModId">Moderator ID:</label>
-                <input type="text" id="clearModId">
-                <label for="clearModPass">Password:</label>
-                <div class="password-container">
-                    <input type="password" id="clearModPass">
-                    <label><input type="checkbox" id="clearShowPassword" onclick="toggleClearPassword()"> Show Password</label>
-                </div>
-                <button class="remove-btn" onclick="clearPlayerDetails()">Clear Player Details</button>
-                <span id="clearError" class="error"></span>
-                <div class="button-group">
-                    <button onclick="logoutModerator()">Logout</button>
-                    <button class="back-button" onclick="backToHome()">Back to Home</button>
-                </div>
-            </div>
-            <datalist id="playerList"></datalist>
         </div>
 
         <!-- Player View Section: Displays leaderboard with search bar and player details -->
@@ -162,7 +54,7 @@
                             <tr>
                                 <th>Date</th>
                                 <th>P.Streak</th>
-                                <th>P.Point (4-16th)</th>
+                                <th>P.Participant</th>
                                 <th>1st</th>
                                 <th>2nd</th>
                                 <th>3rd</th>
@@ -217,44 +109,94 @@
             <button class="back-button" onclick="backToHome()">Back to Home</button>
         </div>
 
-        <!-- JavaScript: Handles all functionality -->
+        <!-- JavaScript: Handles player view and redeemable items -->
         <script>
-            let data = JSON.parse(localStorage.getItem('tournamentData')) || [];
+            const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTOOrxR0LvEzwE_1bh_pK9o_0w0I6_OsvltPXbKsHrWgXbkScP2-YBdr9qKZKps6fDY-6lxvUya7-bB/pub?output=csv'; // Replace with your published CSV URL
+            let data = [];
             let currentPage = 1;
             let currentDetailsPage = 1;
-            const entriesPerPage = 10; //Player per page
-            const detailsPerPage = 20; //details per page
+            const entriesPerPage = 10; // Players per page
+            const detailsPerPage = 20; // Details per page
             let currentPlayers = [];
 
             // Debug function to log data issues
             function debugLog(message) {
-                console.log(`[DEBUG ${new Date().toLocaleString()}] ${message}`);
+                console.log(`[DEBUG ${new Date().toLocaleString()} +08] ${message}`);
             }
 
-            function saveData() {
-                localStorage.setItem('tournamentData', JSON.stringify(data));
-                debugLog(`Saved data to localStorage: ${JSON.stringify(data)}`);
+            // Utility to normalize date to YYYY-MM-DD
+            function normalizeDate(dateStr) {
+                if (!dateStr) return '';
+                const date = new Date(dateStr);
+                return isNaN(date) ? '' : date.toISOString().split('T')[0]; // Returns YYYY-MM-DD or empty if invalid
+            }
+
+            // Load data from Google Sheets CSV using PapaParse
+            async function loadData() {
+                try {
+                    const response = await fetch(CSV_URL);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText} - ${CSV_URL}`);
+                    }
+                    const csvText = await response.text();
+                    debugLog(`Raw CSV data: ${csvText.substring(0, 200)}...`); // Log first 200 chars
+                    const parsed = Papa.parse(csvText, {
+                        header: true,
+                        skipEmptyLines: true,
+                        dynamicTyping: true,
+                        quotes: true,
+                        delimiter: ',',
+                    });
+                    if (parsed.errors.length > 0) {
+                        throw new Error(`Papa Parse errors: ${JSON.stringify(parsed.errors)}`);
+                    }
+                    data = parsed.data.map(entry => {
+                        // Create achievements object from checkbox columns
+                        entry.achievements = {
+                            'P.Streak': entry['P.Streak'] || false,
+                            'P.Participant': entry['P.Participant'] || false,
+                            '1st': entry['1st'] || false,
+                            '2nd': entry['2nd'] || false,
+                            '3rd': entry['3rd'] || false,
+                            'B.Challenge': entry['B.Challenge'] || false,
+                            'S.Challenge': entry['S.Challenge'] || false,
+                            'Shared': entry['Shared'] || false,
+                            'No s.s.': entry['No s.s.'] || false,
+                            'Penalty': entry['Penalty'] || false,
+                        };
+                        if (entry.items) {
+                            let rawValue = entry.items;
+                            rawValue = rawValue.replace(/""/g, '"').replace(/^"|"$/g, '');
+                            try {
+                                entry.items = JSON.parse(rawValue || '[]');
+                                debugLog(`Parsed items: ${JSON.stringify(entry.items)}`);
+                            } catch (e) {
+                                debugLog(`Error parsing items: ${rawValue}, error: ${e.message}`);
+                                entry.items = [];
+                            }
+                        }
+                        entry.date = normalizeDate(entry.date);
+                        entry.isRedemption = entry.isRedemption === true || entry.isRedemption === 'TRUE';
+                        entry.points = Number(entry.points) || 0;
+                        return entry;
+                    });
+                    debugLog(`Loaded data from CSV: ${data.length} entries`);
+                    renderLeaderboard();
+                } catch (error) {
+                    debugLog(`Error loading data: ${error.message}`);
+                    alert('Failed to load data. Please try again.');
+                    data = [];
+                    renderLeaderboard();
+                }
             }
 
             function backToHome() {
                 hideAll();
                 document.getElementById('homePage').classList.remove('hidden');
-                currentTournamentEntries = [];
-                document.getElementById('playerEntries').querySelector('tbody').innerHTML = '';
                 document.getElementById('playerDetails').classList.add('hidden');
                 document.getElementById('leaderboardSearch').value = '';
                 currentPage = 1;
                 renderLeaderboard();
-            }
-
-            function showModeratorLogin() {
-                hideAll();
-                document.getElementById('moderatorLogin').classList.remove('hidden');
-                document.getElementById('modId').value = '';
-                document.getElementById('modPass').value = '';
-                document.getElementById('showPassword').checked = false;
-                document.getElementById('modPass').type = 'password';
-                document.getElementById('loginError').textContent = '';
             }
 
             function showPlayerView() {
@@ -274,268 +216,6 @@
 
             function hideAll() {
                 document.querySelectorAll('.section:not(.hidden)').forEach(el => el.classList.add('hidden'));
-            }
-
-            function togglePassword() {
-                const passInput = document.getElementById('modPass');
-                passInput.type = passInput.type === 'password' ? 'text' : 'password';
-            }
-
-            function toggleClearPassword() {
-                const passInput = document.getElementById('clearModPass');
-                passInput.type = passInput.type === 'password' ? 'text' : 'password';
-            }
-
-            function loginModerator() {
-                const id = document.getElementById('modId').value;
-                const pass = document.getElementById('modPass').value;
-                if (id === 'mod01' && pass === 'imboss') {
-                    hideAll();
-                    document.getElementById('moderatorPanel').classList.remove('hidden');
-                    document.getElementById('loginError').textContent = '';
-                    populatePlayerDatalist();
-                } else {
-                    document.getElementById('loginError').textContent = 'Wrong ID or Password';
-                }
-            }
-
-            function logoutModerator() {
-                hideAll();
-                document.getElementById('homePage').classList.remove('hidden');
-                currentTournamentEntries = [];
-                document.getElementById('playerEntries').querySelector('tbody').innerHTML = '';
-            }
-
-            function populatePlayerDatalist() {
-                const datalist = document.getElementById('playerList');
-                datalist.innerHTML = '';
-                PLAYERS.forEach(player => {
-                    const option = document.createElement('option');
-                    option.value = player;
-                    datalist.appendChild(option);
-                });
-            }
-
-            function addPlayerEntry() {
-                const date = document.getElementById('tournamentDate').value;
-                if (!date) {
-                    alert('Please select a tournament date.');
-                    return;
-                }
-                const entryId = currentTournamentEntries.length;
-                currentTournamentEntries.push({ id: entryId, date });
-                const tbody = document.getElementById('playerEntries').querySelector('tbody');
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><input type="text" id="playerName${entryId}" list="playerList" style="width: 120px;"></td>
-                    <td><input type="number" id="points${entryId}" style="width: 60px;"></td>
-                    ${ACHIEVEMENTS.map(ach => `<td><input type="checkbox" id="${ach}${entryId}"></td>`).join('')}
-                    <td><button class="remove-btn" onclick="removePlayerEntry(${entryId})">Remove</button></td>
-                `;
-                tbody.appendChild(tr);
-            }
-
-            function removePlayerEntry(entryId) {
-                currentTournamentEntries = currentTournamentEntries.filter(e => e.id !== entryId);
-                const tbody = document.getElementById('playerEntries').querySelector('tbody');
-                tbody.innerHTML = '';
-                currentTournamentEntries.forEach((entry, index) => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td><input type="text" id="playerName${index}" list="playerList" style="width: 120px;" value="${entry.player || ''}"></td>
-                        <td><input type="number" id="points${index}" style="width: 60px;" value="${entry.points || ''}"></td>
-                        ${ACHIEVEMENTS.map(ach => `<td><input type="checkbox" id="${ach}${index}" ${entry.achievements && entry.achievements[ach] ? 'checked' : ''}></td>`).join('')}
-                        <td><button class="remove-btn" onclick="removePlayerEntry(${index})">Remove</button></td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
-
-            function loadTournamentEntries() {
-                const date = document.getElementById('tournamentDate').value;
-                currentTournamentEntries = [];
-                const tbody = document.getElementById('playerEntries').querySelector('tbody');
-                tbody.innerHTML = '';
-                if (date) {
-                    const entries = data.filter(e => e.date === date && !e.isRedemption);
-                    entries.forEach((entry, index) => {
-                        currentTournamentEntries.push({ id: index, date, player: entry.player, points: entry.points, achievements: entry.achievements });
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td><input type="text" id="playerName${index}" list="playerList" style="width: 120px;" value="${entry.player}"></td>
-                            <td><input type="number" id="points${index}" style="width: 60px;" value="${entry.points || ''}"></td>
-                            ${ACHIEVEMENTS.map(ach => `<td><input type="checkbox" id="${ach}${index}" ${entry.achievements && entry.achievements[ach] ? 'checked' : ''}></td>`).join('')}
-                            <td><button class="remove-btn" onclick="removePlayerEntry(${index})">Remove</button></td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
-                }
-            }
-
-            function saveTournament() {
-                const date = document.getElementById('tournamentDate').value;
-                if (!date) {
-                    alert('Please select a tournament date.');
-                    return;
-                }
-                let validEntries = 0;
-                currentTournamentEntries.forEach((entry, index) => {
-                    const player = document.getElementById(`playerName${index}`).value.trim();
-                    const points = parseInt(document.getElementById(`points${index}`).value) || 0;
-                    if (player) {
-                        const achievements = {};
-                        ACHIEVEMENTS.forEach(ach => {
-                            achievements[ach] = document.getElementById(`${ach}${index}`).checked;
-                        });
-                        const existingIndex = data.findIndex(e => e.date === date && e.player.toLowerCase() === player.toLowerCase() && !e.isRedemption);
-                        if (existingIndex !== -1) {
-                            data[existingIndex] = { date, player, achievements, points, isRedemption: false };
-                        } else {
-                            data.push({ date, player, achievements, points, isRedemption: false });
-                        }
-                        validEntries++;
-                    }
-                });
-                if (validEntries === 0) {
-                    alert('Please add at least one player with a name.');
-                    return;
-                }
-                saveData();
-                alert('Tournament entries saved.');
-                currentTournamentEntries = [];
-                document.getElementById('playerEntries').querySelector('tbody').innerHTML = '';
-                document.getElementById('tournamentDate').value = '';
-                renderLeaderboard();
-            }
-
-            function editTournament() {
-                const date = document.getElementById('tournamentDate').value;
-                const player = document.getElementById('editPlayerName').value.trim();
-                if (!date || !player) {
-                    alert('Please select a date and player.');
-                    return;
-                }
-                const entry = data.find(e => e.date === date && e.player.toLowerCase() === player.toLowerCase() && !e.isRedemption);
-                if (entry) {
-                    document.getElementById('editPoints').value = entry.points || 0;
-                    ACHIEVEMENTS.forEach(ach => {
-                        document.getElementById(`edit${ach.charAt(0).toUpperCase() + ach.slice(1)}`).checked = entry.achievements[ach];
-                    });
-                    document.getElementById('editTournamentForm').classList.remove('hidden');
-                } else {
-                    alert('No entry found for this player and date.');
-                }
-            }
-
-            function updatePlayerEntry() {
-                const date = document.getElementById('tournamentDate').value;
-                const player = document.getElementById('editPlayerName').value.trim();
-                const points = parseInt(document.getElementById('editPoints').value) || 0;
-                if (!date || !player) {
-                    alert('Please select a date and player.');
-                    return;
-                }
-                const achievements = {};
-                ACHIEVEMENTS.forEach(ach => {
-                    achievements[ach] = document.getElementById(`edit${ach.charAt(0).toUpperCase() + ach.slice(1)}`).checked;
-                });
-                const index = data.findIndex(e => e.date === date && e.player.toLowerCase() === player.toLowerCase() && !e.isRedemption);
-                if (index !== -1) {
-                    data[index] = { date, player, achievements, points, isRedemption: false };
-                    saveData();
-                    alert('Entry updated.');
-                    document.getElementById('editTournamentForm').classList.add('hidden');
-                    document.getElementById('editPlayerName').value = '';
-                    document.getElementById('editPoints').value = '';
-                    renderLeaderboard();
-                } else {
-                    alert('No entry found for this player and date.');
-                }
-            }
-
-            function removeTournament() {
-                const date = document.getElementById('tournamentDate').value;
-                if (!date) {
-                    alert('Please select a tournament date.');
-                    return;
-                }
-                const entries = data.filter(e => e.date === date && !e.isRedemption);
-                if (entries.length > 0) {
-                    if (confirm(`Are you sure you want to remove all entries for ${date}?`)) {
-                        data = data.filter(e => !(e.date === date && !e.isRedemption));
-                        saveData();
-                        alert('Tournament entries removed.');
-                        document.getElementById('tournamentDate').value = '';
-                        renderLeaderboard();
-                    }
-                } else {
-                    alert('No entries found for this date.');
-                }
-            }
-
-            function clearPlayerDetails() {
-                const player = document.getElementById('clearPlayerName').value.trim();
-                const id = document.getElementById('clearModId').value;
-                const pass = document.getElementById('clearModPass').value;
-                if (!player) {
-                    document.getElementById('clearError').textContent = 'Please select a player.';
-                    return;
-                }
-                if (id !== 'mod01' || pass !== 'imboss') {
-                    document.getElementById('clearError').textContent = 'Wrong ID or Password';
-                    return;
-                }
-                const entries = data.filter(e => e.player.toLowerCase() === player.toLowerCase());
-                if (entries.length === 0) {
-                    document.getElementById('clearError').textContent = 'No entries found for this player.';
-                    return;
-                }
-                if (confirm(`Are you sure you want to clear all details for ${player}? This cannot be undone.`)) {
-                    data = data.filter(e => e.player.toLowerCase() !== player.toLowerCase());
-                    saveData();
-                    alert('Player details cleared.');
-                    document.getElementById('clearPlayerName').value = '';
-                    document.getElementById('clearModId').value = '';
-                    document.getElementById('clearModPass').value = '';
-                    document.getElementById('clearShowPassword').checked = false;
-                    document.getElementById('clearModPass').type = 'password';
-                    document.getElementById('clearError').textContent = '';
-                    renderLeaderboard();
-                }
-            }
-
-            function saveRedemption() {
-                const date = document.getElementById('redeemDate').value;
-                const player = document.getElementById('redeemPlayer').value.trim();
-                if (!date || !player) {
-                    alert('Please select a date and player.');
-                    return;
-                }
-                let totalPoints = 0;
-                const items = [];
-                Object.keys(REDEEMABLE_ITEMS).forEach(itemId => {
-                    const quantity = parseInt(document.getElementById(itemId).value) || 0;
-                    if (quantity > 0) {
-                        totalPoints += quantity * REDEEMABLE_ITEMS[itemId].points;
-                        items.push({ name: REDEEMABLE_ITEMS[itemId].name, quantity });
-                    }
-                });
-                if (totalPoints === 0) {
-                    alert('Please select at least one item to redeem.');
-                    return;
-                }
-                const playerTotalPoints = data.filter(e => e.player.toLowerCase() === player.toLowerCase() && !e.isRedemption).reduce((sum, e) => sum + (e.points || 0), 0);
-                if (playerTotalPoints < totalPoints) {
-                    alert('Player does not have enough points.');
-                    return;
-                }
-                data.push({ date, player, points: -totalPoints, items, isRedemption: true });
-                saveData();
-                alert('Redemption saved.');
-                Object.keys(REDEEMABLE_ITEMS).forEach(itemId => document.getElementById(itemId).value = '');
-                document.getElementById('redeemDate').value = '';
-                document.getElementById('redeemPlayer').value = '';
-                renderLeaderboard();
             }
 
             function renderLeaderboard() {
@@ -569,7 +249,7 @@
                 tbody.innerHTML = '';
                 if (paginatedPlayers.length === 0) {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = '<td colspan="3">No players found. Add entries in the Moderator Panel.</td>';
+                    tr.innerHTML = '<td colspan="3">No players found.</td>';
                     tbody.appendChild(tr);
                     debugLog('No players to display in leaderboard');
                 } else {
@@ -612,12 +292,21 @@
                     tbody.appendChild(tr);
                 } else {
                     paginatedEntries.forEach(entry => {
+                        debugLog(`Processing entry for ${entry.player}: ${JSON.stringify(entry)}`);
                         const tr = document.createElement('tr');
-                        tr.innerHTML = `<td>${entry.date}</td>`;
-                        ACHIEVEMENTS.forEach(ach => {
-                            tr.innerHTML += `<td>${entry.achievements && entry.achievements[ach] ? '✓' : '-'}</td>`;
-                        });
-                        const itemsText = entry.isRedemption ? (entry.items || []).map(item => `${item.name} (x${item.quantity})`).join(', ') : '-';
+                        tr.innerHTML = `<td>${normalizeDate(entry.date)}</td>`;
+                        // Map checkbox fields to O/X
+                        tr.innerHTML += `<td>${entry.achievements['P.Streak'] ? 'O' : 'X'}</td>`;
+                        tr.innerHTML += `<td>${entry.achievements['P.Participant'] ? 'O' : 'X'}</td>`;
+                        tr.innerHTML += `<td>${entry.achievements['1st'] ? 'O' : 'X'}</td>`;
+                        tr.innerHTML += `<td>${entry.achievements['2nd'] ? 'O' : 'X'}</td>`;
+                        tr.innerHTML += `<td>${entry.achievements['3rd'] ? 'O' : 'X'}</td>`;
+                        tr.innerHTML += `<td>${entry.achievements['B.Challenge'] ? 'O' : 'X'}</td>`;
+                        tr.innerHTML += `<td>${entry.achievements['S.Challenge'] ? 'O' : 'X'}</td>`;
+                        tr.innerHTML += `<td>${entry.achievements['Shared'] ? 'O' : 'X'}</td>`;
+                        tr.innerHTML += `<td>${entry.achievements['No s.s.'] ? 'O' : 'X'}</td>`;
+                        tr.innerHTML += `<td>${entry.achievements['Penalty'] ? 'O' : 'X'}</td>`;
+                        const itemsText = entry.isRedemption ? (entry.items || []).map(item => `${item.name} (x${item.quantity || 1})`).join(', ') : '-';
                         tr.innerHTML += `<td>${itemsText}</td><td>${entry.points}</td>`;
                         tbody.appendChild(tr);
                     });
@@ -647,7 +336,7 @@
             // Initialize leaderboard on page load
             document.addEventListener('DOMContentLoaded', () => {
                 debugLog('Page loaded, initializing leaderboard');
-                renderLeaderboard();
+                loadData();
             });
         </script>
     </div>
