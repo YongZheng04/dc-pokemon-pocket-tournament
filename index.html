@@ -6,33 +6,30 @@
     <title>Pokémon TCG Pocket Tournament Points System</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    <script src="data.js"></script>
 </head>
 <body>
     <div class="pokedex-container">
         <img id="logo" src="pocketlogo.jpg" alt="Pokémon TCG Logo">
         <h1>Pokémon TCG Pocket Tournament Points System</h1>
         <div id="homePage" class="section pokedex-section">
-            <button class="pokeball-btn" onclick="showPlayerView()">Player</button>
-            <button class="pokeball-btn" onclick="showRedeemableItems()">Redeemable Items</button>
-            <button id="toggleMusic" class="pokeball-btn" onclick="toggleMusic()">Toggle Music</button>
+            <div class="button-row">
+                <button class="game-btn" onclick="showPlayerView()">Player</button>
+                <button class="game-btn" onclick="showOverview()">Overview</button>
+                <button class="game-btn" onclick="showPlayerComparison()">Player Comparison</button>
+                <button class="game-btn" onclick="showTournamentHistory()">Tournament History</button>
+                <button class="game-btn" onclick="showFunFact()">Random Fun Fact</button>
+            </div>
         </div>
 
-        <audio id="backgroundMusic" loop>
-            <source src="https://www.pokemon.com/static-assets/content/legacy/pokemon-game-sound-library-en_us.zip" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
-
-        <!-- Player View Section: Displays leaderboard with search bar and player details -->
+        <!-- Player View Section -->
         <div id="playerView" class="section pokedex-section hidden">
             <h2>Player Leaderboard</h2>
-            <div id="kingOfTournament" class="king-table"></div>
             <div class="search-bar">
                 <label for="leaderboardSearch">Search Player:</label>
                 <input type="text" id="leaderboardSearch" oninput="filterLeaderboard()" placeholder="Enter player name">
             </div>
             <div class="table-container">
-                <table id="leaderboardTable">
+                <table id="leaderboardTable" class="game-leaderboard">
                     <thead>
                         <tr>
                             <th>Rank</th>
@@ -51,14 +48,13 @@
                 <button id="lastPage" onclick="changePage(999)">Last Page</button>
             </div>
             <div class="button-group">
-                <button class="back-button pokeball-btn" onclick="backToHome()">Back to Home</button>
-                <button class="pokeball-btn" onclick="alert('Feature coming soon!')">View Summary</button>
+                <button class="back-button game-btn" onclick="backToHome()">Back to Home</button>
             </div>
             <div id="playerDetails" class="section pokedex-section hidden">
                 <h3 id="playerDetailsName"></h3>
                 <div id="playerProfileCard" class="pokemon-card"></div>
                 <div class="table-container">
-                    <table id="detailsTable">
+                    <table id="detailsTable" class="game-leaderboard">
                         <thead>
                             <tr>
                                 <th>Date</th>
@@ -87,86 +83,95 @@
                     <button id="lastDetailsPage" onclick="changeDetailsPage(999)">Last Page</button>
                 </div>
                 <div class="button-group">
-                    <button class="back-button pokeball-btn" onclick="backToLeaderboard()">Back to Leaderboard</button>
-                    <button class="back-button pokeball-btn" onclick="backToHome()">Back to Home</button>
+                    <button class="back-button game-btn" onclick="backToLeaderboard()">Back to Leaderboard</button>
+                    <button class="back-button game-btn" onclick="backToHome()">Back to Home</button>
                 </div>
             </div>
         </div>
 
-        <!-- Redeemable Items Section: Displays available items for players to view -->
-        <div id="redeemableItems" class="section pokedex-section hidden">
-            <h2>Redeemable Items</h2>
-            <div class="table-container">
-                <table id="itemsTable">
-                    <thead>
-                        <tr>
-                            <th>Points</th>
-                            <th>Item</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>5500</td><td>Random SV Booster Box X 1</td></tr>
-                        <tr><td>1300</td><td>Random SV Booster Bundle X 1</td></tr>
-                        <tr><td>1000</td><td>Mystery Gift X 10 (Guaranteed Hits in 2)</td></tr>
-                        <tr><td>600</td><td>Random SV Booster Pack X 3</td></tr>
-                        <tr><td>400</td><td>Discover Collectibles Playmat X 1</td></tr>
-                        <tr><td>300</td><td>Mystery Gift X 3 (High Chance Hits in 1)</td></tr>
-                        <tr><td>220</td><td>Random SV Booster Pack X 1</td></tr>
-                        <tr><td>100</td><td>Mystery Gift X 1</td></tr>
-                        <tr><td>20</td><td>Bro Hug X 1</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <button class="back-button pokeball-btn" onclick="backToHome()">Back to Home</button>
+        <!-- Overview Section -->
+        <div id="overviewView" class="section pokedex-section hidden">
+            <h2>Overview</h2>
+            <div id="tournamentStats" class="pokemon-leaderboard"></div>
+            <div id="redeemableSummary" class="pokemon-leaderboard"></div>
+            <button class="back-button game-btn" onclick="backToHome()">Back to Home</button>
         </div>
 
-        <!-- JavaScript: Handles player view and redeemable items -->
+        <!-- Player Comparison Section -->
+        <div id="playerComparisonView" class="section pokedex-section hidden">
+            <h2>Player Comparison Tool</h2>
+            <div class="battle-arena">
+                <div class="search-bar">
+                    <label for="player1Select">Player 1:</label>
+                    <select id="player1Select" onchange="comparePlayers()">
+                        <option value="">Select Player</option>
+                    </select>
+                </div>
+                <div class="vs-text">VS</div>
+                <div class="search-bar">
+                    <label for="player2Select">Player 2:</label>
+                    <select id="player2Select" onchange="comparePlayers()">
+                        <option value="">Select Player</option>
+                    </select>
+                </div>
+            </div>
+            <div id="comparisonResult" class="battle-result"></div>
+            <button class="back-button game-btn" onclick="backToHome()">Back to Home</button>
+        </div>
+
+        <!-- Tournament History Section -->
+        <div id="tournamentHistoryView" class="section pokedex-section hidden">
+            <h2>Tournament History Timeline</h2>
+            <div class="search-bar">
+                <label for="dateSelect">Select Tournament Date:</label>
+                <select id="dateSelect" onchange="filterHistory()">
+                    <option value="">Select Date</option>
+                </select>
+            </div>
+            <div id="historyTimeline" class="pokedex-log"></div>
+            <button class="back-button game-btn" onclick="backToHome()">Back to Home</button>
+        </div>
+
+        <!-- Random Fun Fact Section -->
+        <div id="funFactView" class="section pokedex-section hidden">
+            <h2>Random Fun Fact</h2>
+            <div id="funFactText" class="troll-note"></div>
+            <button class="game-btn" onclick="generateFunFact()">Generate New Fact</button>
+            <button class="back-button game-btn" onclick="backToHome()">Back to Home</button>
+        </div>
+
         <script>
             const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTOOrxR0LvEzwE_1bh_pK9o_0w0I6_OsvltPXbKsHrWgXbkScP2-YBdr9qKZKps6fDY-6lxvUya7-bB/pub?output=csv'; // Replace with your published CSV URL
             let data = [];
             let currentPage = 1;
             let currentDetailsPage = 1;
-            const entriesPerPage = 10; // Players per page
-            const detailsPerPage = 20; // Details per page
+            const entriesPerPage = 10;
+            const detailsPerPage = 20;
             let currentPlayers = [];
-            let musicPlaying = false;
+            let filteredPlayers = [];
 
-            // Debug function to log data issues
             function debugLog(message) {
                 console.log(`[DEBUG ${new Date().toLocaleString()} +08] ${message}`);
             }
 
-            // Utility to normalize date to YYYY-MM-DD
             function normalizeDate(dateStr) {
                 if (!dateStr) return '';
                 const date = new Date(dateStr);
-                return isNaN(date) ? '' : date.toISOString().split('T')[0]; // Returns YYYY-MM-DD or empty if invalid
+                return isNaN(date) ? '' : date.toISOString().split('T')[0];
             }
 
-            // Load data from Google Sheets CSV using PapaParse
             async function loadData() {
                 try {
                     const response = await fetch(CSV_URL);
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText} - ${CSV_URL}`);
-                    }
+                    if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText} - ${CSV_URL}`);
                     const csvText = await response.text();
-                    debugLog(`Raw CSV data: ${csvText.substring(0, 200)}...`); // Log first 200 chars
-                    const parsed = Papa.parse(csvText, {
-                        header: true,
-                        skipEmptyLines: true,
-                        dynamicTyping: true,
-                        quotes: true,
-                        delimiter: ',',
-                    });
-                    if (parsed.errors.length > 0) {
-                        throw new Error(`Papa Parse errors: ${JSON.stringify(parsed.errors)}`);
-                    }
+                    debugLog(`Raw CSV data: ${csvText.substring(0, 200)}...`);
+                    const parsed = Papa.parse(csvText, { header: true, skipEmptyLines: true, dynamicTyping: true, quotes: true, delimiter: ',' });
+                    if (parsed.errors.length > 0) throw new Error(`Papa Parse errors: ${JSON.stringify(parsed.errors)}`);
                     data = parsed.data.map(entry => {
-                        // Create achievements object from checkbox columns
                         entry.achievements = {
                             'P.Streak': entry['P.Streak'] || false,
-                            'P.Participant': entry['P.Participant'] || false,
+                            'P.Participant (4-16th)': entry['P.Participant (4-16th)'] || false,
                             '1st': entry['1st'] || false,
                             '2nd': entry['2nd'] || false,
                             '3rd': entry['3rd'] || false,
@@ -177,15 +182,9 @@
                             'Penalty': entry['Penalty'] || false,
                         };
                         if (entry.items) {
-                            let rawValue = entry.items;
-                            rawValue = rawValue.replace(/""/g, '"').replace(/^"|"$/g, '');
-                            try {
-                                entry.items = JSON.parse(rawValue || '[]');
-                                debugLog(`Parsed items: ${JSON.stringify(entry.items)}`);
-                            } catch (e) {
-                                debugLog(`Error parsing items: ${rawValue}, error: ${e.message}`);
-                                entry.items = [];
-                            }
+                            let rawValue = entry.items.replace(/""/g, '"').replace(/^"|"$/g, '');
+                            try { entry.items = JSON.parse(rawValue || '[]'); debugLog(`Parsed items: ${JSON.stringify(entry.items)}`); }
+                            catch (e) { debugLog(`Error parsing items: ${rawValue}, error: ${e.message}`); entry.items = []; }
                         }
                         entry.date = normalizeDate(entry.date);
                         entry.isRedemption = entry.isRedemption === true || entry.isRedemption === 'TRUE';
@@ -194,24 +193,14 @@
                     });
                     debugLog(`Loaded data from CSV: ${data.length} entries`);
                     renderLeaderboard();
+                    updateFilteredPlayers();
+                    populateDateSelect();
+                    populatePlayerSelect();
                 } catch (error) {
                     debugLog(`Error loading data: ${error.message}`);
                     alert('Failed to load data. Please try again.');
                     data = [];
                     renderLeaderboard();
-                }
-            }
-
-            function toggleMusic() {
-                const music = document.getElementById('backgroundMusic');
-                if (musicPlaying) {
-                    music.pause();
-                    musicPlaying = false;
-                    document.getElementById('toggleMusic').textContent = 'Play Music';
-                } else {
-                    music.play();
-                    musicPlaying = true;
-                    document.getElementById('toggleMusic').textContent = 'Pause Music';
                 }
             }
 
@@ -235,10 +224,69 @@
                 renderLeaderboard();
             }
 
-            function showRedeemableItems() {
+            function showOverview() {
+                debugLog('Showing overview');
                 hideAll();
-                document.getElementById('redeemableItems').classList.remove('hidden');
-                setTimeout(() => document.getElementById('redeemableItems').classList.add('fade-in'), 10);
+                const totalPoints = data.reduce((sum, entry) => sum + (entry.points || 0), 0);
+                const tournamentCount = [...new Set(data.map(entry => entry.date))].length;
+                const players = {};
+                data.forEach(entry => {
+                    const playerLower = entry.player.toLowerCase();
+                    if (!players[playerLower]) players[playerLower] = { name: entry.player, total: 0 };
+                    players[playerLower].total += (entry.points || 0);
+                });
+                const topPlayers = Object.values(players).sort((a, b) => b.total - a.total).slice(0, 10);
+                const totalSpent = data.filter(e => e.isRedemption).reduce((sum, entry) => sum + (entry.points || 0), 0);
+                const itemCounts = {};
+                data.filter(e => e.isRedemption && e.items).forEach(entry => {
+                    entry.items.forEach(item => {
+                        itemCounts[item.name] = (itemCounts[item.name] || 0) + (item.quantity || 1);
+                    });
+                });
+                const mostPopularItem = Object.entries(itemCounts).reduce((a, b) => a[1] > b[1] ? a : b, [null, 0])[0] || 'None';
+                const remainingPoints = totalPoints - Math.abs(totalSpent);
+
+                document.getElementById('tournamentStats').innerHTML = `
+                    <h3>Tournament Statistics</h3>
+                    <div class="pokemon-entry"><p style="text-align: center;">Total Points: ${totalPoints}</p></div>
+                    <div class="pokemon-entry"><p style="text-align: center;">Tournaments: ${tournamentCount}</p></div>
+                    <h4>Top 10 Trainers</h4>
+                    <ul class="pokemon-list">
+                        ${topPlayers.map((p, i) => `<li class="pokemon-entry"><p style="text-align: center;">${i + 1}. ${p.name} - ${p.total} pts (${getTrainerRank(p.total)})</p></li>`).join('')}
+                    </ul>
+                `;
+                document.getElementById('redeemableSummary').innerHTML = `
+                    <h3>Poké Mart Inventory</h3>
+                    <div class="pokemon-entry"><p style="text-align: center;">Points Spent: ${totalSpent}</p></div>
+                    <div class="pokemon-entry"><p style="text-align: center;">Popular Item: ${mostPopularItem}</p></div>
+                    <div class="pokemon-entry"><p style="text-align: center;">Remaining: ${remainingPoints} <progress value="${Math.abs(totalSpent)}" max="${totalPoints}"></progress></p></div>
+                `;
+                document.getElementById('overviewView').classList.remove('hidden');
+                setTimeout(() => document.getElementById('overviewView').classList.add('fade-in'), 10);
+            }
+
+            function showPlayerComparison() {
+                debugLog('Showing player comparison');
+                hideAll();
+                comparePlayers();
+                document.getElementById('playerComparisonView').classList.remove('hidden');
+                setTimeout(() => document.getElementById('playerComparisonView').classList.add('fade-in'), 10);
+            }
+
+            function showTournamentHistory() {
+                debugLog('Showing tournament history');
+                hideAll();
+                document.getElementById('historyTimeline').innerHTML = '';
+                document.getElementById('tournamentHistoryView').classList.remove('hidden');
+                setTimeout(() => document.getElementById('tournamentHistoryView').classList.add('fade-in'), 10);
+            }
+
+            function showFunFact() {
+                debugLog('Showing fun fact');
+                hideAll();
+                generateFunFact();
+                document.getElementById('funFactView').classList.remove('hidden');
+                setTimeout(() => document.getElementById('funFactView').classList.add('fade-in'), 10);
             }
 
             function hideAll() {
@@ -257,58 +305,16 @@
                 const players = {};
                 data.filter(e => !e.isRedemption).forEach(entry => {
                     const playerLower = entry.player.toLowerCase();
-                    if (!players[playerLower]) {
-                        players[playerLower] = { name: entry.player, total: 0 };
-                    }
+                    if (!players[playerLower]) players[playerLower] = { name: entry.player, total: 0 };
                     players[playerLower].total += (entry.points || 0);
                 });
                 data.filter(e => e.isRedemption).forEach(entry => {
                     const playerLower = entry.player.toLowerCase();
-                    if (!players[playerLower]) {
-                        players[playerLower] = { name: entry.player, total: 0 };
-                    }
+                    if (!players[playerLower]) players[playerLower] = { name: entry.player, total: 0 };
                     players[playerLower].total += (entry.points || 0);
                 });
                 currentPlayers = Object.values(players).sort((a, b) => b.total - a.total);
-
-                // Calculate King of the Tournament stats
-                const achievementCounts = {};
-                data.forEach(entry => {
-                    const playerLower = entry.player.toLowerCase();
-                    if (!achievementCounts[playerLower]) {
-                        achievementCounts[playerLower] = {
-                            '1st': 0, '2nd': 0, '3rd': 0, 'B.Challenge': 0, 'S.Challenge': 0
-                        };
-                    }
-                    if (entry.achievements['1st']) achievementCounts[playerLower]['1st']++;
-                    if (entry.achievements['2nd']) achievementCounts[playerLower]['2nd']++;
-                    if (entry.achievements['3rd']) achievementCounts[playerLower]['3rd']++;
-                    if (entry.achievements['B.Challenge']) achievementCounts[playerLower]['B.Challenge']++;
-                    if (entry.achievements['S.Challenge']) achievementCounts[playerLower]['S.Challenge']++;
-                });
-                const kings = {
-                    '1st': Object.entries(achievementCounts).sort((a, b) => b[1]['1st'] - a[1]['1st'])[0],
-                    '2nd': Object.entries(achievementCounts).sort((a, b) => b[1]['2nd'] - a[1]['2nd'])[0],
-                    '3rd': Object.entries(achievementCounts).sort((a, b) => b[1]['3rd'] - a[1]['3rd'])[0],
-                    'B.Challenge': Object.entries(achievementCounts).sort((a, b) => b[1]['B.Challenge'] - a[1]['B.Challenge'])[0],
-                    'S.Challenge': Object.entries(achievementCounts).sort((a, b) => b[1]['S.Challenge'] - a[1]['S.Challenge'])[0]
-                };
-                const kingTable = document.getElementById('kingOfTournament');
-                kingTable.innerHTML = `
-                    <h3>King of the Tournament</h3>
-                    <table>
-                        <tr><th>Category</th><th>Player</th><th>Count</th></tr>
-                        <tr><td>1st Place</td><td>${kings['1st'][0]}</td><td>${kings['1st'][1]['1st']}</td></tr>
-                        <tr><td>2nd Place</td><td>${kings['2nd'][0]}</td><td>${kings['2nd'][1]['2nd']}</td></tr>
-                        <tr><td>3rd Place</td><td>${kings['3rd'][0]}</td><td>${kings['3rd'][1]['3rd']}</td></tr>
-                        <tr><td>Big Challenge</td><td>${kings['B.Challenge'][0]}</td><td>${kings['B.Challenge'][1]['B.Challenge']}</td></tr>
-                        <tr><td>Small Challenge</td><td>${kings['S.Challenge'][0]}</td><td>${kings['S.Challenge'][1]['S.Challenge']}</td></tr>
-                    </table>
-                `;
-
-                if (searchTerm) {
-                    currentPlayers = currentPlayers.filter(p => p.name.toLowerCase().includes(searchTerm));
-                }
+                if (searchTerm) currentPlayers = currentPlayers.filter(p => p.name.toLowerCase().includes(searchTerm));
                 const totalPages = Math.ceil(currentPlayers.length / entriesPerPage);
                 const start = (currentPage - 1) * entriesPerPage;
                 const end = start + entriesPerPage;
@@ -319,19 +325,13 @@
                     const tr = document.createElement('tr');
                     tr.innerHTML = '<td colspan="3">No players found.</td>';
                     tbody.appendChild(tr);
-                    debugLog('No players to display in leaderboard');
                 } else {
                     paginatedPlayers.forEach((p, index) => {
                         const globalIndex = start + index + 1;
                         const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${globalIndex}</td>
-                            <td><a href="#" onclick="showPlayerDetails('${p.name}', 1)">${p.name}</a></td>
-                            <td>${p.total}</td>
-                        `;
+                        tr.innerHTML = `<td>${globalIndex}</td><td><a href="#" onclick="showPlayerDetails('${p.name}', 1)">${p.name}</a></td><td>${p.total}</td>`;
                         tbody.appendChild(tr);
                     });
-                    debugLog(`Rendered ${paginatedPlayers.length} players on page ${currentPage}`);
                 }
                 document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages || 1}`;
                 document.getElementById('firstPage').disabled = currentPage === 1;
@@ -356,66 +356,18 @@
                 const paginatedEntries = entries.slice(start, end);
                 const tbody = document.getElementById('detailsTable').querySelector('tbody');
                 tbody.innerHTML = '';
-
-                // Calculate player stats for profile card
-                const playerStats = {
-                    totalPoints: 0,
-                    achievements: {
-                        '1st': 0,
-                        '2nd': 0,
-                        '3rd': 0,
-                        'B.Challenge': 0,
-                        'S.Challenge': 0,
-                        'P.Streak': 0,
-                        'P.Participant': 0
-                    }
-                };
-                entries.forEach(entry => {
-                    playerStats.totalPoints += entry.points || 0;
-                    for (let ach in playerStats.achievements) {
-                        if (entry.achievements[ach]) playerStats.achievements[ach]++;
-                    }
-                });
-
-                // Render player profile card
+                const playerStats = { totalPoints: 0, achievements: { '1st': 0, '2nd': 0, '3rd': 0, 'B.Challenge': 0, 'S.Challenge': 0, 'P.Streak': 0, 'P.Participant (4-16th)': 0, 'Shared': 0, 'No s.s.': 0, 'Penalty': 0 } };
+                entries.forEach(entry => { playerStats.totalPoints += entry.points || 0; for (let ach in playerStats.achievements) if (entry.achievements[ach]) playerStats.achievements[ach]++; });
                 const profileCard = document.getElementById('playerProfileCard');
-                profileCard.innerHTML = `
-                    <div class="pokemon-card-content">
-                        <h4>${player}'s Profile</h4>
-                        <p>Total Points: ${playerStats.totalPoints}</p>
-                        <p>Achievements:</p>
-                        <p>1st x${playerStats.achievements['1st']}</p>
-                        <p>2nd x${playerStats.achievements['2nd']}</p>
-                        <p>3rd x${playerStats.achievements['3rd']}</p>
-                        <p>B.Challenge x${playerStats.achievements['B.Challenge']}</p>
-                        <p>S.Challenge x${playerStats.achievements['S.Challenge']}</p>
-                        <p>P.Streak x${playerStats.achievements['P.Streak']}</p>
-                        <p>Participant x${playerStats.achievements['P.Participant']}</p>
-                    </div>
-                `;
-
+                profileCard.innerHTML = `<div class="pokemon-card-content"><h4>${player}'s Profile</h4><p>Total Points: ${playerStats.totalPoints}</p><p>Achievements: 1st x${playerStats.achievements['1st']}, 2nd x${playerStats.achievements['2nd']}, 3rd x${playerStats.achievements['3rd']}</p><p>B.Challenge x${playerStats.achievements['B.Challenge']}, S.Challenge x${playerStats.achievements['S.Challenge']}</p><p>P.Streak x${playerStats.achievements['P.Streak']}, Participant x${playerStats.achievements['P.Participant (4-16th)']}</p></div>`;
                 if (paginatedEntries.length === 0) {
                     const tr = document.createElement('tr');
                     tr.innerHTML = '<td colspan="13">No entries found for this player.</td>';
                     tbody.appendChild(tr);
                 } else {
                     paginatedEntries.forEach(entry => {
-                        debugLog(`Processing entry for ${entry.player}: ${JSON.stringify(entry)}`);
                         const tr = document.createElement('tr');
-                        tr.innerHTML = `<td>${normalizeDate(entry.date)}</td>`;
-                        // Map checkbox fields to O/X
-                        tr.innerHTML += `<td>${entry.achievements['P.Streak'] ? 'O' : 'X'}</td>`;
-                        tr.innerHTML += `<td>${entry.achievements['P.Participant'] ? 'O' : 'X'}</td>`;
-                        tr.innerHTML += `<td>${entry.achievements['1st'] ? 'O' : 'X'}</td>`;
-                        tr.innerHTML += `<td>${entry.achievements['2nd'] ? 'O' : 'X'}</td>`;
-                        tr.innerHTML += `<td>${entry.achievements['3rd'] ? 'O' : 'X'}</td>`;
-                        tr.innerHTML += `<td>${entry.achievements['B.Challenge'] ? 'O' : 'X'}</td>`;
-                        tr.innerHTML += `<td>${entry.achievements['S.Challenge'] ? 'O' : 'X'}</td>`;
-                        tr.innerHTML += `<td>${entry.achievements['Shared'] ? 'O' : 'X'}</td>`;
-                        tr.innerHTML += `<td>${entry.achievements['No s.s.'] ? 'O' : 'X'}</td>`;
-                        tr.innerHTML += `<td>${entry.achievements['Penalty'] ? 'O' : 'X'}</td>`;
-                        const itemsText = entry.isRedemption ? (entry.items || []).map(item => `${item.name} (x${item.quantity || 1})`).join('<br>') : '-';
-                        tr.innerHTML += `<td>${itemsText}</td><td>${entry.points}</td>`;
+                        tr.innerHTML = `<td>${normalizeDate(entry.date)}</td><td>${entry.achievements['P.Streak'] ? 'O' : 'X'}</td><td>${entry.achievements['P.Participant (4-16th)'] ? 'O' : 'X'}</td><td>${entry.achievements['1st'] ? 'O' : 'X'}</td><td>${entry.achievements['2nd'] ? 'O' : 'X'}</td><td>${entry.achievements['3rd'] ? 'O' : 'X'}</td><td>${entry.achievements['B.Challenge'] ? 'O' : 'X'}</td><td>${entry.achievements['S.Challenge'] ? 'O' : 'X'}</td><td>${entry.achievements['Shared'] ? 'O' : 'X'}</td><td>${entry.achievements['No s.s.'] ? 'O' : 'X'}</td><td>${entry.achievements['Penalty'] ? 'O' : 'X'}</td><td>${entry.isRedemption ? (entry.items || []).map(item => `${item.name} (x${item.quantity || 1})`).join('<br>') : '-'}</td><td>${entry.points}</td>`;
                         tbody.appendChild(tr);
                     });
                 }
@@ -430,8 +382,8 @@
 
             function changePage(direction) {
                 const totalPages = Math.ceil(currentPlayers.length / entriesPerPage);
-                if (direction === 0) currentPage = 1; // First Page
-                else if (direction === 999) currentPage = totalPages || 1; // Last Page
+                if (direction === 0) currentPage = 1;
+                else if (direction === 999) currentPage = totalPages || 1;
                 else currentPage += direction;
                 currentPage = Math.max(1, Math.min(currentPage, totalPages || 1));
                 renderLeaderboard();
@@ -441,8 +393,8 @@
                 const player = document.getElementById('playerDetailsName').textContent.replace(' Details', '');
                 const entries = data.filter(e => e.player.toLowerCase() === player.toLowerCase());
                 const totalPages = Math.ceil(entries.length / detailsPerPage);
-                if (direction === 0) currentDetailsPage = 1; // First Page
-                else if (direction === 999) currentDetailsPage = totalPages || 1; // Last Page
+                if (direction === 0) currentDetailsPage = 1;
+                else if (direction === 999) currentDetailsPage = totalPages || 1;
                 else currentDetailsPage += direction;
                 currentDetailsPage = Math.max(1, Math.min(currentDetailsPage, totalPages || 1));
                 showPlayerDetails(player, currentDetailsPage);
@@ -457,13 +409,139 @@
                 }, 300);
             }
 
-            // Initialize leaderboard on page load
+            function getTrainerRank(points) {
+                if (points < 1000) return 'Beginner';
+                if (points < 5000) return 'Ace';
+                return 'Champion';
+            }
+
+            function getTournamentWinner(date) {
+                const entries = data.filter(e => e.date === date && !e.isRedemption);
+                const players = {};
+                entries.forEach(entry => {
+                    const playerLower = entry.player.toLowerCase();
+                    if (!players[playerLower]) players[playerLower] = { name: entry.player, total: 0 };
+                    players[playerLower].total += (entry.points || 0);
+                });
+                return Object.values(players).sort((a, b) => b.total - a.total)[0]?.name || null;
+            }
+
+            function getTournamentTotalPoints(date) {
+                return data.filter(e => e.date === date).reduce((sum, entry) => sum + (entry.points || 0), 0);
+            }
+
+            function updateFilteredPlayers() {
+                const players = {};
+                data.forEach(entry => {
+                    const playerLower = entry.player.toLowerCase();
+                    if (!players[playerLower]) players[playerLower] = { name: entry.player, total: 0 };
+                    players[playerLower].total += (entry.points || 0);
+                });
+                filteredPlayers = Object.values(players).sort((a, b) => b.total - a.total);
+                populatePlayerSelect();
+            }
+
+            function populatePlayerSelect() {
+                const player1Select = document.getElementById('player1Select');
+                const player2Select = document.getElementById('player2Select');
+                [player1Select, player2Select].forEach(select => {
+                    select.innerHTML = '<option value="">Select Player</option>';
+                    filteredPlayers.sort((a, b) => a.name.localeCompare(b.name)).forEach(p => {
+                        const option = document.createElement('option');
+                        option.value = p.name;
+                        option.textContent = p.name;
+                        select.appendChild(option);
+                    });
+                });
+            }
+
+            function populateDateSelect() {
+                const dates = [...new Set(data.map(entry => entry.date))].sort();
+                const dateSelect = document.getElementById('dateSelect');
+                dateSelect.innerHTML = '<option value="">Select Date</option>';
+                dates.forEach(date => {
+                    const option = document.createElement('option');
+                    option.value = date;
+                    option.textContent = new Date(date).toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' });
+                    dateSelect.appendChild(option);
+                });
+            }
+
+            function comparePlayers() {
+                const player1Name = document.getElementById('player1Select').value;
+                const player2Name = document.getElementById('player2Select').value;
+                if (!player1Name || !player2Name || player1Name === player2Name) {
+                    document.getElementById('comparisonResult').innerHTML = '<h3>Battle Arena</h3><p>Select two different players for an epic battle!</p>';
+                    return;
+                }
+                const p1Data = data.filter(e => e.player.toLowerCase() === player1Name.toLowerCase());
+                const p2Data = data.filter(e => e.player.toLowerCase() === player2Name.toLowerCase());
+                const p1Total = p1Data.reduce((sum, e) => sum + (e.points || 0), 0);
+                const p2Total = p2Data.reduce((sum, e) => sum + (e.points || 0), 0);
+                const p1Ach = { '1st': 0, '2nd': 0, '3rd': 0, 'B.Challenge': 0, 'S.Challenge': 0 };
+                const p2Ach = { '1st': 0, '2nd': 0, '3rd': 0, 'B.Challenge': 0, 'S.Challenge': 0 };
+                p1Data.forEach(e => { for (let ach in p1Ach) if (e.achievements[ach]) p1Ach[ach]++; });
+                p2Data.forEach(e => { for (let ach in p2Ach) if (e.achievements[ach]) p2Ach[ach]++; });
+                const recentP1 = p1Data.sort((a, b) => new Date(b.date) - new Date(a.date))[0]?.points || 0;
+                const recentP2 = p2Data.sort((a, b) => new Date(b.date) - new Date(a.date))[0]?.points || 0;
+                document.getElementById('comparisonResult').innerHTML = `
+                    <h3>Battle Arena</h3>
+                    <div class="battle-stats">
+                        <div class="player-stats"><h4>${player1Name}</h4><p>Points: ${p1Total} (${getTrainerRank(p1Total)})</p><p>Recent: ${recentP1} pts</p><p>Achievements: 1st x${p1Ach['1st']}, 2nd x${p1Ach['2nd']}, 3rd x${p1Ach['3rd']}</p></div>
+                        <div class="player-stats"><h4>${player2Name}</h4><p>Points: ${p2Total} (${getTrainerRank(p2Total)})</p><p>Recent: ${recentP2} pts</p><p>Achievements: 1st x${p2Ach['1st']}, 2nd x${p2Ach['2nd']}, 3rd x${p2Ach['3rd']}</p></div>
+                    </div>
+                    <div class="battle-outcome">${p1Total > p2Total ? `${player1Name} wins!` : p2Total > p1Total ? `${player2Name} wins!` : 'It\'s a tie!'}</div>
+                `;
+            }
+
+            function filterHistory() {
+                const date = document.getElementById('dateSelect').value;
+                const historyTimeline = document.getElementById('historyTimeline');
+                if (!date) {
+                    historyTimeline.innerHTML = '<p class="pokedex-entry">Select a date to view tournament history!</p>';
+                    return;
+                }
+                const entries = data.filter(e => e.date === date);
+                const players = {};
+                entries.forEach(entry => {
+                    const playerLower = entry.player.toLowerCase();
+                    if (!players[playerLower]) players[playerLower] = { name: entry.player, total: 0 };
+                    players[playerLower].total += (entry.points || 0);
+                });
+                historyTimeline.innerHTML = Object.values(players).sort((a, b) => b.total - a.total).map(p => `
+                    <div class="pokedex-entry">
+                        <h4>${p.name}</h4>
+                        <p>Points: ${p.total}</p>
+                    </div>
+                `).join('');
+            }
+
+            function generateFunFact() {
+                const trollFacts = [
+                    `Did you know ${getPlayerWithMost('Penalty')} tripped over a Poké Ball and got ${getAchievementCount('Penalty')} penalties? 😂`,
+                    `Rumor has it ${currentPlayers[0]?.name} bribed a Pikachu for ${currentPlayers[0]?.total} points! 😱`,
+                    `Total points: ${data.reduce((sum, e) => sum + (e.points || 0), 0)}—someone’s hoarding Poké Dollars! 🤪`
+                ];
+                document.getElementById('funFactText').innerHTML = `<h3>Troll Pokémon Note</h3><p>${trollFacts[Math.floor(Math.random() * trollFacts.length)]}</p>`;
+            }
+
+            function getPlayerWithMost(achievement) {
+                const counts = {};
+                data.forEach(entry => {
+                    const playerLower = entry.player.toLowerCase();
+                    if (!counts[playerLower]) counts[playerLower] = 0;
+                    if (entry.achievements[achievement]) counts[playerLower]++;
+                });
+                return Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
+            }
+
+            function getAchievementCount(achievement) {
+                return data.filter(e => e.achievements[achievement]).length;
+            }
+
             document.addEventListener('DOMContentLoaded', () => {
                 debugLog('Page loaded, initializing leaderboard');
                 loadData();
-                document.getElementById('backgroundMusic').play();
-                musicPlaying = true;
-                document.getElementById('toggleMusic').textContent = 'Pause Music';
             });
         </script>
     </div>
