@@ -25,7 +25,7 @@
         <div id="playerView" class="section pokedex-section hidden">
             <h2>Player Leaderboard</h2>
             <div class="search-bar">
-                <label for="leaderboardSearch">Search Player:</label>
+                <label for="leaderboardSearch">Search Player: (Click name for more details)</label>
                 <input type="text" id="leaderboardSearch" oninput="filterLeaderboard()" placeholder="Enter player name">
             </div>
             <div class="table-container">
@@ -146,7 +146,7 @@
             let currentPage = 1;
             let currentDetailsPage = 1;
             const entriesPerPage = 10;
-            const detailsPerPage = 20;
+            const detailsPerPage = 10;
             let currentPlayers = [];
             let filteredPlayers = [];
 
@@ -171,7 +171,7 @@
                     data = parsed.data.map(entry => {
                         entry.achievements = {
                             'P.Streak': entry['P.Streak'] || false,
-                            'P.Participant (4-16th)': entry['P.Participant (4-16th)'] || false,
+                            'P.Participant': entry['P.Participant'] || false,
                             '1st': entry['1st'] || false,
                             '2nd': entry['2nd'] || false,
                             '3rd': entry['3rd'] || false,
@@ -248,18 +248,25 @@
 
                 document.getElementById('tournamentStats').innerHTML = `
                     <h3>Tournament Statistics</h3>
-                    <div class="pokemon-entry"><p style="text-align: center;">Total Points: ${totalPoints}</p></div>
-                    <div class="pokemon-entry"><p style="text-align: center;">Tournaments: ${tournamentCount}</p></div>
+                    <table class="pokemon-leaderboard">
+                        <tr><th>Category</th><th>Value</th></tr>
+                        <tr><td>Total Points</td><td>${totalPoints}</td></tr>
+                        <tr><td>Tournaments</td><td>${tournamentCount}</td></tr>
+                    </table>
                     <h4>Top 10 Trainers</h4>
-                    <ul class="pokemon-list">
-                        ${topPlayers.map((p, i) => `<li class="pokemon-entry"><p style="text-align: center;">${i + 1}. ${p.name} - ${p.total} pts (${getTrainerRank(p.total)})</p></li>`).join('')}
-                    </ul>
+                    <table class="pokemon-leaderboard">
+                        <tr><th>Rank</th><th>Player</th><th>Points</th><th>Rank</th></tr>
+                        ${topPlayers.map((p, i) => `<tr><td>${i + 1}</td><td>${p.name}</td><td>${p.total}</td><td>${getTrainerRank(p.total)}</td></tr>`).join('')}
+                    </table>
                 `;
                 document.getElementById('redeemableSummary').innerHTML = `
                     <h3>Poké Mart Inventory</h3>
-                    <div class="pokemon-entry"><p style="text-align: center;">Points Spent: ${totalSpent}</p></div>
-                    <div class="pokemon-entry"><p style="text-align: center;">Popular Item: ${mostPopularItem}</p></div>
-                    <div class="pokemon-entry"><p style="text-align: center;">Remaining: ${remainingPoints} <progress value="${Math.abs(totalSpent)}" max="${totalPoints}"></progress></p></div>
+                    <table class="pokemon-leaderboard">
+                        <tr><th>Category</th><th>Value</th></tr>
+                        <tr><td>Points Spent</td><td>${totalSpent}</td></tr>
+                        <tr><td>Popular Item</td><td>${mostPopularItem}</td></tr>
+                        <tr><td>Remaining</td><td>${remainingPoints} <progress value="${Math.abs(totalSpent)}" max="${totalPoints}"></progress></td></tr>
+                    </table>
                 `;
                 document.getElementById('overviewView').classList.remove('hidden');
                 setTimeout(() => document.getElementById('overviewView').classList.add('fade-in'), 10);
@@ -356,10 +363,10 @@
                 const paginatedEntries = entries.slice(start, end);
                 const tbody = document.getElementById('detailsTable').querySelector('tbody');
                 tbody.innerHTML = '';
-                const playerStats = { totalPoints: 0, achievements: { '1st': 0, '2nd': 0, '3rd': 0, 'B.Challenge': 0, 'S.Challenge': 0, 'P.Streak': 0, 'P.Participant (4-16th)': 0, 'Shared': 0, 'No s.s.': 0, 'Penalty': 0 } };
+                const playerStats = { totalPoints: 0, achievements: { '1st': 0, '2nd': 0, '3rd': 0, 'B.Challenge': 0, 'S.Challenge': 0, 'P.Streak': 0, 'P.Participant': 0, 'Shared': 0, 'No s.s.': 0, 'Penalty': 0 } };
                 entries.forEach(entry => { playerStats.totalPoints += entry.points || 0; for (let ach in playerStats.achievements) if (entry.achievements[ach]) playerStats.achievements[ach]++; });
                 const profileCard = document.getElementById('playerProfileCard');
-                profileCard.innerHTML = `<div class="pokemon-card-content"><h4>${player}'s Profile</h4><p>Total Points: ${playerStats.totalPoints}</p><p>Achievements: 1st x${playerStats.achievements['1st']}, 2nd x${playerStats.achievements['2nd']}, 3rd x${playerStats.achievements['3rd']}</p><p>B.Challenge x${playerStats.achievements['B.Challenge']}, S.Challenge x${playerStats.achievements['S.Challenge']}</p><p>P.Streak x${playerStats.achievements['P.Streak']}, Participant x${playerStats.achievements['P.Participant (4-16th)']}</p></div>`;
+                profileCard.innerHTML = `<div class="pokemon-card-content"><h4>${player}'s Profile</h4><p>Total Points: ${playerStats.totalPoints}</p><p>Achievements: 1st x${playerStats.achievements['1st']}, 2nd x${playerStats.achievements['2nd']}, 3rd x${playerStats.achievements['3rd']}</p><p>B.Challenge x${playerStats.achievements['B.Challenge']}, S.Challenge x${playerStats.achievements['S.Challenge']}</p><p>P.Streak x${playerStats.achievements['P.Streak']}, Participant x${playerStats.achievements['P.Participant']}</p></div>`;
                 if (paginatedEntries.length === 0) {
                     const tr = document.createElement('tr');
                     tr.innerHTML = '<td colspan="13">No entries found for this player.</td>';
@@ -367,7 +374,7 @@
                 } else {
                     paginatedEntries.forEach(entry => {
                         const tr = document.createElement('tr');
-                        tr.innerHTML = `<td>${normalizeDate(entry.date)}</td><td>${entry.achievements['P.Streak'] ? 'O' : 'X'}</td><td>${entry.achievements['P.Participant (4-16th)'] ? 'O' : 'X'}</td><td>${entry.achievements['1st'] ? 'O' : 'X'}</td><td>${entry.achievements['2nd'] ? 'O' : 'X'}</td><td>${entry.achievements['3rd'] ? 'O' : 'X'}</td><td>${entry.achievements['B.Challenge'] ? 'O' : 'X'}</td><td>${entry.achievements['S.Challenge'] ? 'O' : 'X'}</td><td>${entry.achievements['Shared'] ? 'O' : 'X'}</td><td>${entry.achievements['No s.s.'] ? 'O' : 'X'}</td><td>${entry.achievements['Penalty'] ? 'O' : 'X'}</td><td>${entry.isRedemption ? (entry.items || []).map(item => `${item.name} (x${item.quantity || 1})`).join('<br>') : '-'}</td><td>${entry.points}</td>`;
+                        tr.innerHTML = `<td>${normalizeDate(entry.date)}</td><td>${entry.achievements['P.Streak'] ? 'O' : 'X'}</td><td>${entry.achievements['P.Participant'] ? 'O' : 'X'}</td><td>${entry.achievements['1st'] ? 'O' : 'X'}</td><td>${entry.achievements['2nd'] ? 'O' : 'X'}</td><td>${entry.achievements['3rd'] ? 'O' : 'X'}</td><td>${entry.achievements['B.Challenge'] ? 'O' : 'X'}</td><td>${entry.achievements['S.Challenge'] ? 'O' : 'X'}</td><td>${entry.achievements['Shared'] ? 'O' : 'X'}</td><td>${entry.achievements['No s.s.'] ? 'O' : 'X'}</td><td>${entry.achievements['Penalty'] ? 'O' : 'X'}</td><td>${entry.isRedemption ? (entry.items || []).map(item => `${item.name} (x${item.quantity || 1})`).join('<br>') : '-'}</td><td>${entry.points}</td>`;
                         tbody.appendChild(tr);
                     });
                 }
@@ -410,9 +417,11 @@
             }
 
             function getTrainerRank(points) {
-                if (points < 1000) return 'Beginner';
-                if (points < 5000) return 'Ace';
-                return 'Champion';
+                if (points < 500) return 'Newbie';
+                if (points < 1000) return 'Pokéball';
+                if (points < 2000) return 'Greatball';
+                if (points < 3000) return 'Ultraball';
+                return 'Masterball';
             }
 
             function getTournamentWinner(date) {
@@ -518,11 +527,22 @@
 
             function generateFunFact() {
                 const trollFacts = [
-                    `Did you know ${getPlayerWithMost('Penalty')} tripped over a Poké Ball and got ${getAchievementCount('Penalty')} penalties? 😂`,
-                    `Rumor has it ${currentPlayers[0]?.name} bribed a Pikachu for ${currentPlayers[0]?.total} points! 😱`,
-                    `Total points: ${data.reduce((sum, e) => sum + (e.points || 0), 0)}—someone’s hoarding Poké Dollars! 🤪`
+                    `Behold the Pokémon Master ${getPlayerWithMost('1st')} with ${getPlayerAchievementCount(getPlayerWithMost('1st'), '1st')} epic 1st wins—bow to the champ! 😂`,
+                    `Richest trainer ${currentPlayers[0]?.name} hoards ${currentPlayers[0]?.total} points—time to raid their Poké Bank! 💰😱`,
+                    `Big spender ${getPlayerWithMostRedemptionPoints()} blew ${getPlayerTotalRedemptionPoints(getPlayerWithMostRedemptionPoints())} points at the Poké Mart—shopaholic alert! 🛒🤪`,
+                    `This tournament raked in ${data.reduce((sum, e) => sum + (e.points || 0), 0)} points—someone’s printing Poké Dollars! 💸😂`,
+                    `Clumsy ${getPlayerWithMost('No s.s.')} forgot to save ${getPlayerAchievementCount(getPlayerWithMost('No s.s.'), 'No s.s.')} times—Game Over! 😅`,
+                    `Streak king ${getPlayerWithMost('P.Streak')} nailed ${getPlayerAchievementCount(getPlayerWithMost('P.Streak'), 'P.Streak')} P.Streaks—unstoppable! 🔥🤣`,
+                    `Challenge Master ${getPlayerWithMostChallenges()} conquered ${getPlayerChallengeCount(getPlayerWithMostChallenges())} challenges (B + S)—legend status! ⚔️😎`,
+                    `Penalty prone ${getPlayerWithMost('Penalty')} tripped ${getPlayerAchievementCount(getPlayerWithMost('Penalty'), 'Penalty')} times—watch your step! 🚶‍♂️😂`
                 ];
                 document.getElementById('funFactText').innerHTML = `<h3>Troll Pokémon Note</h3><p>${trollFacts[Math.floor(Math.random() * trollFacts.length)]}</p>`;
+            }
+
+            function getPlayerAchievementCount(playerName, achievement) {
+                return data.filter(e => 
+                    e.player.toLowerCase() === playerName.toLowerCase() && e.achievements[achievement]
+                ).length;
             }
 
             function getPlayerWithMost(achievement) {
@@ -535,10 +555,40 @@
                 return Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
             }
 
-            function getAchievementCount(achievement) {
-                return data.filter(e => e.achievements[achievement]).length;
+            function getPlayerTotalPoints(playerName) {
+                return data.filter(e => e.player.toLowerCase() === playerName.toLowerCase())
+                    .reduce((sum, e) => sum + (e.points || 0), 0);
             }
 
+            function getPlayerWithMostRedemptionPoints() {
+                const totals = {};
+                data.filter(e => e.isRedemption).forEach(entry => {
+                    const playerLower = entry.player.toLowerCase();
+                    if (!totals[playerLower]) totals[playerLower] = 0;
+                    totals[playerLower] += (entry.points || 0);
+                });
+                return Object.entries(totals).sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
+            }
+
+            function getPlayerTotalRedemptionPoints(playerName) {
+                return data.filter(e => e.isRedemption && e.player.toLowerCase() === playerName.toLowerCase())
+                    .reduce((sum, e) => sum + (e.points || 0), 0);
+            }
+
+            function getPlayerChallengeCount(playerName) {
+                const playerData = data.filter(e => e.player.toLowerCase() === playerName.toLowerCase());
+                return playerData.filter(e => e.achievements['B.Challenge'] || e.achievements['S.Challenge']).length;
+            }
+
+            function getPlayerWithMostChallenges() {
+                const totals = {};
+                data.forEach(entry => {
+                    const playerLower = entry.player.toLowerCase();
+                    if (!totals[playerLower]) totals[playerLower] = 0;
+                    if (entry.achievements['B.Challenge'] || entry.achievements['S.Challenge']) totals[playerLower]++;
+                });
+                return Object.entries(totals).sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
+            }
             document.addEventListener('DOMContentLoaded', () => {
                 debugLog('Page loaded, initializing leaderboard');
                 loadData();
