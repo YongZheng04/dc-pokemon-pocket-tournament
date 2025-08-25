@@ -590,15 +590,18 @@
             }
 
             function generateFunFact() {
+                if (!data || data.length === 0) {
+                    document.getElementById('funFactText').innerHTML = `<h3>Troll Pokémon Note</h3><p>No data available yet—check back after the tournament starts! 😄</p>`;
+                    return;
+                }
                 const trollFacts = [
-                    `Behold the Pokémon Master ${getPlayerWithMost('1st')} with ${getPlayerAchievementCount(getPlayerWithMost('1st'), '1st')} epic 1st wins—bow to the champ! 😂`,
-                    `Richest trainer ${currentPlayers[0]?.name} hoards ${currentPlayers[0]?.total} points—time to raid their Poké Bank! 💰😱`,
-                    `Big spender ${getPlayerWithMostRedemptionPoints()} blew ${getPlayerTotalRedemptionPoints(getPlayerWithMostRedemptionPoints())} points at the Poké Mart—shopaholic alert! 🛒🤪`,
+                    `Behold the Pokémon Master ${getPlayerWithMost('1st') || 'N/A'} with ${getPlayerAchievementCount(getPlayerWithMost('1st') || '', '1st') || 0} epic 1st wins—bow to the champ! 😂`,
+                    `Richest trainer ${currentPlayers[0]?.name || 'N/A'} hoards ${currentPlayers[0]?.total || 0} points—time to raid their Poké Bank! 💰😱`,
                     `This tournament raked in ${data.reduce((sum, e) => sum + (e.points || 0), 0)} points—someone’s printing Poké Dollars! 💸😂`,
-                    `Clumsy ${getPlayerWithMost('No s.s.')} forgot to save ${getPlayerAchievementCount(getPlayerWithMost('No s.s.'), 'No s.s.')} times—Game Over! 😅`,
-                    `Streak king ${getPlayerWithMost('P.Streak')} nailed ${getPlayerAchievementCount(getPlayerWithMost('P.Streak'), 'P.Streak')} P.Streaks—unstoppable! 🔥🤣`,
-                    `Challenge Master ${getPlayerWithMostChallenges()} conquered ${getPlayerChallengeCount(getPlayerWithMostChallenges())} challenges (B + S)—legend status! ⚔️😎`,
-                    `Penalty prone ${getPlayerWithMost('Penalty')} tripped ${getPlayerAchievementCount(getPlayerWithMost('Penalty'), 'Penalty')} times—watch your step! 🚶‍♂️😂`
+                    `Clumsy ${getPlayerWithMost('No s.s.') || 'N/A'} forgot to save ${getPlayerAchievementCount(getPlayerWithMost('No s.s.') || '', 'No s.s.') || 0} times—Game Over! 😅`,
+                    `Streak king ${getPlayerWithMost('P.Streak') || 'N/A'} nailed ${getPlayerAchievementCount(getPlayerWithMost('P.Streak') || '', 'P.Streak') || 0} P.Streaks—unstoppable! 🔥🤣`,
+                    `Challenge Master ${getPlayerWithMostChallenges() || 'N/A'} conquered ${getPlayerChallengeCount(getPlayerWithMostChallenges() || '') || 0} challenges (B + S)—legend status! ⚔️😎`,
+                    `Penalty prone ${getPlayerWithMost('Penalty') || 'N/A'} tripped ${getPlayerAchievementCount(getPlayerWithMost('Penalty') || '', 'Penalty') || 0} times—watch your step! 🚶‍♂️😂`
                 ];
                 document.getElementById('funFactText').innerHTML = `<h3>Troll Pokémon Note</h3><p>${trollFacts[Math.floor(Math.random() * trollFacts.length)]}</p>`;
             }
@@ -634,11 +637,6 @@
                 return Object.entries(totals).sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
             }
 
-            function getPlayerTotalRedemptionPoints(playerName) {
-                return data.filter(e => e.isRedemption && e.player.toLowerCase() === playerName.toLowerCase())
-                    .reduce((sum, e) => sum + (e.points || 0), 0);
-            }
-
             function getPlayerChallengeCount(playerName) {
                 const playerData = data.filter(e => e.player.toLowerCase() === playerName.toLowerCase());
                 return playerData.filter(e => e.achievements['B.Challenge'] || e.achievements['S.Challenge']).length;
@@ -653,9 +651,21 @@
                 });
                 return Object.entries(totals).sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
             }
+
+            function showFunFact() {
+                debugLog('Showing fun fact');
+                hideAll();
+                generateFunFact(); // Ensure this runs after data is loaded
+                document.getElementById('funFactView').classList.remove('hidden');
+                setTimeout(() => document.getElementById('funFactView').classList.add('fade-in'), 10);
+            }
+
             document.addEventListener('DOMContentLoaded', () => {
                 debugLog('Page loaded, initializing leaderboard');
-                loadData();
+                loadData().then(() => {
+                    // Ensure currentPlayers is populated after data load
+                    renderLeaderboard();
+                });
             });
         </script>
     </div>
