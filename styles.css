@@ -284,7 +284,7 @@ a:hover {
 }
 
 .pokemon-leaderboard table {
-    width: 51%; /* Ensures the table matches the container width */
+    width: 24%; /* Ensures the table matches the container width */
     border-collapse: collapse; /* Removes spacing between table cells */
     margin: 0 auto; /* LINE 3: Centers the inner table within the container */
 }
@@ -293,7 +293,7 @@ a:hover {
     border: 2px solid #ffcc00;
     padding: 0.4rem;
     text-align: center; /* LINE 4: Centers the text within each cell */
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     white-space: nowrap; /* Keeps text in a single line */
     background: rgba(255, 255, 255, 0.8);
 }
