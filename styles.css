@@ -271,28 +271,46 @@ a:hover {
 
 /* Pokémon Leaderboard for Overview */
 .pokemon-leaderboard {
-    border: 6px double #ffae00;
-    background: linear-gradient(135deg, #ffcccc 0%, #66ccff 100%);
-    border-radius: 15px;
-    padding: 1rem;
-    margin: 0.5rem 0;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+    border: 4px solid #ffae00;
+    background: linear-gradient(135deg, #ff9999 0%, #66ccff 100%);
+    border-radius: 10px;
+    overflow-x: auto; /* Enables horizontal scrolling if content exceeds width */
+    margin: 0 auto; /* LINE 1: Centers the table horizontally */
+    display: block;
+    text-align: center; /* LINE 2: Centers the text/content within the table */
+    width: 100%; /* Fits the full width of the container */
+    max-width: 100%; /* Prevents exceeding container width */
+    box-sizing: border-box; /* Includes padding and border in width calculation */
+}
+
+.pokemon-leaderboard table {
+    width: 51%; /* Ensures the table matches the container width */
+    border-collapse: collapse; /* Removes spacing between table cells */
+    margin: 0 auto; /* LINE 3: Centers the inner table within the container */
+}
+
+.pokemon-leaderboard th, .pokemon-leaderboard td {
+    border: 2px solid #ffcc00;
+    padding: 0.4rem;
+    text-align: center; /* LINE 4: Centers the text within each cell */
+    font-size: 0.8rem;
+    white-space: nowrap; /* Keeps text in a single line */
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.pokemon-leaderboard th {
+    background-color: #ff4444;
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 .pokemon-entry {
-    border: 2px dashed #ffcc00;
-    padding: 0.4rem;
-    margin: 0.2rem 0;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 5px;
-    text-align: center;
-    font-family: 'Comic Sans MS';
-    color: #ff3333;
-    max-width: 300px;
-    display: inline-block;
+    display: none; /* Removed to use table-based design */
 }
 
 .pokemon-list {
+    display: none; /* Removed to use table-based design */
     list-style: none;
     padding: 0;
     text-align: center;
