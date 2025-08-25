@@ -320,9 +320,17 @@ a:hover {
     margin: 0.2rem 0;
 }
 
-/* Troll Note for Fun Fact (Removed since fun fact is elsewhere) */
+/* Troll Note for Fun Fact */
 .troll-note {
-    display: none;
+    padding: 0.8rem;
+    margin: 0.5rem auto;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px dashed #ffcc00;
+    border-radius: 5px;
+    text-align: center;
+    color: #ff3333;
+    max-width: 400px;
+    font-size: 0.9rem;
 }
 
 /* Battle Arena for Player Comparison */
